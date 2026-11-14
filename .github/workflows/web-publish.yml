@@ -50,6 +50,9 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y libgmp-dev libmpfr-dev zlib1g-dev
+          gh release download release/v2.8.0 --repo meelgroup/ganak --pattern ganak-v2.8.0-linux-amd64.tar.gz --dir "$RUNNER_TEMP/ganak-test"
+          python3 scripts/web/install-test-ganak.py "$RUNNER_TEMP/ganak-test/ganak-v2.8.0-linux-amd64.tar.gz" "$RUNNER_TEMP/ganak-test/ganak"
+          export QUPRS_GANAK_PATH="$RUNNER_TEMP/ganak-test/ganak"
           mkdir -p "$RUNNER_TEMP/qa-results"
           cargo test --locked --manifest-path rust/Cargo.toml -p quprs --features browser-transport --lib -- --test-threads=1 2>&1 | tee "$RUNNER_TEMP/qa-results/upstream-unit.log"
       - name: Actual browser and native differential checks
