@@ -1004,7 +1004,7 @@ DEALINGS IN THE SOFTWARE.
 </details>
 ## Browser fork — 2026-11-15
 
-This guluchen/QuPRS fork adds a browser UI and WASM transport around the original QuPRS v0.16.0 core (upstream 0b28736651b3740ed3b201edd2efdef3da541e0d). Upstream verification/reduction/classification remains in use. A portable clock alias and opt-in capture/replay transport adapt the subprocess boundary. The browser build omits the native MPFR input-weight bridge and uses binary64 input weights; the separate GPMC counter retains its original MPFR arithmetic. Reported distances are numerical estimates, not end-to-end certified intervals.
+This guluchen/QuPRS fork adds a browser UI and WASM transport around the original QuPRS v0.16.0 core (upstream 0b28736651b3740ed3b201edd2efdef3da541e0d). Upstream verification/reduction/classification remains in use. A portable clock alias and opt-in capture/replay transport adapt the subprocess boundary. The browser transports original rational phase descriptors and runs the original MPFR C input-weight bridge inside the GPMC worker (96–1024 bits selected by upstream tolerance policy). The separate GPMC counter retains its original MPFR arithmetic at 30 decimal digits. Reported distances are numerical estimates, not end-to-end certified intervals.
 
 Worker ownership, bounded output collection and the WASM resource-clock shim are adapted from guluchen/PathsumWMC (MIT), copyright 2026 guluchen and contributors. The shim reports elapsed worker wall time and allocated linear memory rather than OS CPU time/RSS. Browser integration was prepared with Codex; it is not a new independent reimplementation of QuPRS.
 

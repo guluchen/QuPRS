@@ -1,6 +1,6 @@
 // Browser adapter for the original QuPRS core. MIT licensed.
-import init,{BrowserJob} from './pkg/quprs_web.js';
-const ready=init();let resolveCount,rejectCount;
+import init,{BrowserJob} from './pkg/quprs_web.js?v=20261115-quprs-source-mpfr-v2';
+const ready=init({module_or_path:new URL('./pkg/quprs_web_bg.wasm?v=20261115-quprs-source-mpfr-v2',import.meta.url)});let resolveCount,rejectCount;
 self.onmessage=async({data})=>{
  if(data.count_result){const r=data.count_result;r.error?rejectCount?.(new Error(r.error)):resolveCount?.(r);return}
  let prepared;

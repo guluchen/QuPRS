@@ -1,4 +1,4 @@
-import {createWorkerHost} from './engines/host.js';
+import {createWorkerHost} from './engines/host.js?v=20261115-quprs-source-mpfr-v2';
 const $=id=>document.getElementById(id);let host,last,pendingUploads=0;
 function busy(value){$('inputs').disabled=value;$('run').disabled=value||pendingUploads>0;$('stop').disabled=!value}
 function setPair(a,b,n=1){const pre=`OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[${n}];\n`;$('left').value=pre+a;$('right').value=pre+b}
@@ -12,7 +12,7 @@ $('form').onsubmit=async e=>{
  const request={circuit1:$('left').value,circuit2:$('right').value,mode:$('mode').value,strategy:$('strategy').value,distance_tolerance:Number($('epsilon').value),rr_tolerance:Number($('rr').value)};
  busy(true);$('state').textContent='Computing locally…';const start=performance.now();
  try{
-  const root=new Worker(new URL('worker.js',import.meta.url),{type:'module'});host=createWorkerHost(root,new URL('engines/',import.meta.url).href,200000);root.postMessage({request});
+  const root=new Worker(new URL('worker.js?v=20261115-quprs-source-mpfr-v2',import.meta.url),{type:'module'});host=createWorkerHost(root,new URL('engines/',import.meta.url).href,200000);root.postMessage({request});
   const {report}=await host.result;last={...report,wall_ms:performance.now()-start};$('state').textContent='Completed.';
   const d=report.distance_estimate;$('distance').textContent=typeof d==='number'?`≈ ${d===0?'0':d.toExponential(5)}`:'Not computed';
   $('verdict').textContent=`QuPRS result: ${report.rr_approximate?'accepted under RR tolerance':report.status}`;

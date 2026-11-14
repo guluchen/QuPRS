@@ -2,6 +2,7 @@
 """Assemble immutable validated binaries with matching corresponding sources."""
 import pathlib,shutil,hashlib,json,tarfile,sys
 core,counter,out=map(pathlib.Path,sys.argv[1:4]);shutil.copytree('web',out)
+for name in ['LICENSE.md','NOTICE.md']:shutil.copy2(name,out/name)
 shutil.copytree(core/'web/pkg',out/'pkg',dirs_exist_ok=True)
 for name in ['gpmc.js','gpmc.wasm','sources','PROVENANCE.json']:
  source=counter/name;target=out/'engines'/name
