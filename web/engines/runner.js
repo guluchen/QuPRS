@@ -5,7 +5,7 @@ self.onmessage = async ({data}) => {
   if (!['gpmc','ganak'].includes(data.engine) || typeof data.cnf !== 'string') {
     self.postMessage({error:'Invalid counter request.'}); return;
   }
-  const version=new URL(self.location.href).searchParams.get('v')||'20261115-quprs-mpfr-v1';
+  const version=new URL(self.location.href).searchParams.get('v')||'20261115-quprs-source-mpfr-v2';
   const asset=name=>{const url=new URL(name,self.location.href);url.searchParams.set('v',version);return url.href};
   importScripts(asset('output.js'));
   const output=self.createCounterOutput();

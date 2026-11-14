@@ -29,11 +29,15 @@ fi
 git clone https://github.com/PhysicsQoo/GPMC.git gpmc
 git -C gpmc checkout 93cae8dbf2da967e34fea8b7f40bc8f98362e2e0
 cp "$ROOT/scripts/web/BrowserTime.cc" gpmc/utils/BrowserTime.cc
+cp "$ROOT/scripts/web/PhaseWeights.hpp" gpmc/utils/PhaseWeights.hpp
+cp "$ROOT/rust/quprs/native/mpfr_weight_bridge.c" gpmc/utils/QuPRSPhaseBridge.c
 python3 - "$BUILD/gpmc" <<'PY'
 from pathlib import Path
 import sys
-p=Path(sys.argv[1]);f=p/'core/Main.cc';s=f.read_text().replace('\t\tSetSigAct();','\t\t#ifndef __EMSCRIPTEN__\n\t\tSetSigAct();\n\t\t#endif').replace('#if defined(_WIN32)\n','#if defined(_WIN32) || defined(__EMSCRIPTEN__)\n');f.write_text(s)
-f=p/'CMakeLists.txt';s=f.read_text()+'''\nif(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
+p=Path(sys.argv[1]);f=p/'core/Main.cc';s=f.read_text().replace('#include <errno.h>','#include <errno.h>\n#include \"utils/PhaseWeights.hpp\"').replace('string filename = (argc == 1) ? \"\" : argv[1];','string filename = (argc == 1) ? \"\" : argv[1];\n        if (!filename.empty()) filename=quprs_source_weights(filename);').replace('\t\tSetSigAct();','\t\t#ifndef __EMSCRIPTEN__\n\t\tSetSigAct();\n\t\t#endif').replace('#if defined(_WIN32)\n','#if defined(_WIN32) || defined(__EMSCRIPTEN__)\n');f.write_text(s)
+f=p/'CMakeLists.txt';s=f.read_text()+'''\nenable_language(C)
+target_sources(gpmc-bin PRIVATE utils/QuPRSPhaseBridge.c)
+if(CMAKE_SYSTEM_NAME STREQUAL "Emscripten")
  target_sources(gpmc-bin PRIVATE utils/BrowserTime.cc)
  set_target_properties(gpmc-bin PROPERTIES SUFFIX ".js")
 endif()\n''';f.write_text(s)
@@ -48,7 +52,7 @@ cmake --build native-build -j2
 cp native-build/gpmc "$OUT/native-gpmc"
 git -C gpmc diff > "$OUT/sources/GPMC-browser.patch"
 mkdir -p source-bundle/scripts/web
-cp "$ROOT/scripts/web/build-counter.sh" "$ROOT/scripts/web/BrowserTime.cc" source-bundle/scripts/web/
+cp "$ROOT/scripts/web/build-counter.sh" "$ROOT/scripts/web/BrowserTime.cc" "$ROOT/scripts/web/PhaseWeights.hpp" source-bundle/scripts/web/
 cp -R gpmc source-bundle/gpmc-patched
 rm -rf source-bundle/gpmc-patched/.git
 cp downloads/gmp-6.3.0.tar.xz downloads/mpfr-4.2.1.tar.xz source-bundle/
@@ -57,6 +61,6 @@ tar czf "$OUT/sources/gpmc-mpfr-browser-source.tar.gz" source-bundle
 python3 - "$OUT" <<'PY'
 import pathlib,hashlib,json,sys
 p=pathlib.Path(sys.argv[1]);files=[p/'gpmc.js',p/'gpmc.wasm',p/'native-gpmc',*sorted((p/'sources').iterdir())]
-manifest={'repository':'https://github.com/PhysicsQoo/GPMC','revision':'93cae8dbf2da967e34fea8b7f40bc8f98362e2e0','version':'v1.0.2','arithmetic':'Original MPFR complex arithmetic, 30 decimal digits; numeric estimate, not an end-to-end certificate','emscripten':'4.0.23','wasm_memory_max_mib':512,'cpp_stack_mib':16,'resource_clock':'worker-local elapsed wall time and linear-memory proxy; not OS CPU/RSS','sha256':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}}
+manifest={'repository':'https://github.com/PhysicsQoo/GPMC','revision':'93cae8dbf2da967e34fea8b7f40bc8f98362e2e0','version':'v1.0.2','arithmetic':'Original QuPRS source-phase bridge (96–1024-bit selected input weights) and MPFR complex counting; numeric estimate, not an end-to-end certificate','emscripten':'4.0.23','wasm_memory_max_mib':512,'cpp_stack_mib':16,'resource_clock':'worker-local elapsed wall time and linear-memory proxy; not OS CPU/RSS','sha256':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in files}}
 (p/'PROVENANCE.json').write_text(json.dumps(manifest,indent=2)+'\n')
 PY

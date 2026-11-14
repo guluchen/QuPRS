@@ -49,7 +49,7 @@ pub mod wmc;
 pub mod precision_count;
 mod solver_adapter;
 mod wmc_problem;
-#[cfg(feature="high-precision-gpmc")]
+#[cfg(any(feature="high-precision-gpmc",feature="browser-transport"))]
 mod precise_weight;
 pub mod solver_result;
 mod diagnostics;

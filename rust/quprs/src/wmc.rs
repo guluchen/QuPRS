@@ -62,6 +62,10 @@ pub struct WmcManager {
     weights: HashMap<i32, Complex<f64>>, 
     var_map: HashMap<u32, i32>,
     next_var_id: i32,
+    #[cfg(feature="browser-transport")]
+    browser_phase_lines: Vec<String>,
+    #[cfg(feature="browser-transport")]
+    browser_weight_bits: usize,
     #[cfg(feature="high-precision-gpmc")]
     precise_weights: Option<HashMap<i32, (String, String)>>,
     #[cfg(feature="high-precision-gpmc")]
@@ -75,6 +79,10 @@ impl WmcManager {
             weights: HashMap::new(),
             var_map: HashMap::new(),
             next_var_id: 1,
+            #[cfg(feature="browser-transport")]
+            browser_phase_lines:Vec::new(),
+            #[cfg(feature="browser-transport")]
+            browser_weight_bits:96,
             #[cfg(feature="high-precision-gpmc")]
             precise_weights: None,
             #[cfg(feature="high-precision-gpmc")]
@@ -112,6 +120,11 @@ impl WmcManager {
             // Do not compute an f64 weight at all when the precise GPMC
             // distance-mode input is selected. The separate optional map
             // owns the original source phase's decimal weight.
+            #[cfg(feature="browser-transport")]
+            let browser_exact=crate::browser_transport::active();
+            #[cfg(not(feature="browser-transport"))]
+            let browser_exact=false;
+            let weight=if browser_exact {Complex::new(1.0,0.0)} else {
             #[cfg(feature="high-precision-gpmc")]
             let weight = if let Some(ref mut precise) = self.precise_weights {
                 let id = self.next_var_id;
@@ -178,10 +191,19 @@ impl WmcManager {
                 Ok(Complex::new(angle.cos(), angle.sin()))
             })()?;
 
+                weight
+            };
+
             let z_i = self.next_var_id;
             self.next_var_id += 1;
             
             self.weights.insert(z_i, weight);
+            #[cfg(feature="browser-transport")]
+            if browser_exact {
+                if !coeff.symbols.is_empty(){return Err(anyhow!("Unbound phase symbol cannot become an MPFR input weight"))}
+                let rad=coeff.radians.as_ref().cloned().unwrap_or_else(BigRational::zero);
+                self.browser_phase_lines.push(format!("c p quprs-phase {z_i} {} {} {} {} {} {}\n",coeff.constant.numer,coeff.constant.denom,rad.numer(),rad.denom(),u8::from(coeff.radians.is_some()),self.browser_weight_bits));
+            }
 
             if mono.is_empty() {
                 self.clauses.push(vec![z_i]);
@@ -261,6 +283,8 @@ impl WmcManager {
     }
 
     pub fn encode_trace(&mut self, ps: &PathSum) -> Result<()> {
+        #[cfg(feature="browser-transport")]
+        if crate::browser_transport::active(){self.browser_weight_bits=if ps.p.terms.is_empty(){96}else{crate::precise_weight::bits_for_distance(crate::browser_transport::epsilon(),ps.p.terms.len())?};}
         self.encode_phase_polynomial(ps)?;
 
         for i in 0..ps.v.num_qubits {
@@ -303,6 +327,8 @@ impl WmcManager {
         if self.precise_weights.as_ref().is_some_and(|weights| !weights.is_empty()) {
             return false;
         }
+        #[cfg(feature="browser-transport")]
+        if !self.browser_phase_lines.is_empty(){return false;}
         let Ok(vars) = usize::try_from(self.next_var_id - 1) else {
             return false;
         };
@@ -324,6 +350,12 @@ impl WmcManager {
         let problem=crate::wmc_problem::WmcProblem::new(
             self.next_var_id - 1, &self.clauses, &self.weights
         );
+        #[cfg(feature="browser-transport")]
+        if crate::browser_transport::active() && adapter.id()=="gpmc" {
+            let mut out=problem.serialize(adapter);
+            for phase in &self.browser_phase_lines{out.push_str(phase);}
+            return out;
+        }
         #[cfg(feature="high-precision-gpmc")]
         if adapter.id()=="gpmc" {
             if let Some(ref precise)=self.precise_weights {
@@ -439,6 +471,7 @@ impl WmcManager {
         let tool_name = adapter.id();
         #[cfg(feature="browser-transport")]
         if crate::browser_transport::active() {
+            if tool_name!="gpmc"{return Err(anyhow!("Browser transport currently supports GPMC only"))}
             let cnf=prepared_cnf.map(str::to_owned).unwrap_or_else(||self.to_dimacs_with_adapter(adapter));
             let stdout=crate::browser_transport::exchange(tool_name,&cnf)?;
             return parser(&stdout)?.ok_or_else(||anyhow!("Browser counter returned no recognizable count"));

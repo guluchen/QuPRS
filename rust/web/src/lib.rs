@@ -51,7 +51,7 @@ fn report(result:EquivalenceCheckResult,stdout:Option<&str>)->Result<Value,Strin
   "numerical_verdict":result.wmc_printed_verdict,"precision_reason":result.wmc_precision_reason,
   "distance_tolerance":result.approximate_distance_tolerance,"warning":warning,
   "core_seconds":result.verification_time,"pathsum_seconds":result.pathsum_time,"counter_seconds":result.tool_time,
-  "upstream_revision":"0b28736651b3740ed3b201edd2efdef3da541e0d","web_weight_precision":"binary64 input weights; MPFR complex counter, 30 decimal digits"}))
+  "upstream_revision":"0b28736651b3740ed3b201edd2efdef3da541e0d","web_weight_precision":"upstream MPFR source-phase weights (96–1024 bits), generated in counter worker; MPFR complex counting, 30 decimal digits"}))
 }
 #[cfg_attr(target_arch="wasm32",wasm_bindgen)]
 pub struct BrowserJob {request:Request,job:Option<Job>,immediate:Option<Value>}
@@ -60,7 +60,7 @@ impl BrowserJob {
  #[cfg_attr(target_arch="wasm32",wasm_bindgen(constructor))]
  pub fn new(request_json:&str)->Result<BrowserJob,String> {
   let request:Request=serde_json::from_str(request_json).map_err(|e|e.to_string())?;
-  let (result,job)=browser_transport::capture(||verify(&request));
+  let (result,job)=browser_transport::capture_with_epsilon(request.distance_tolerance,||verify(&request));
   let immediate=match (result,job.as_ref()) {
    (Ok(result),None)=>Some(report(result,None)?),
    (Err(error),Some(_)) if error.downcast_ref::<browser_transport::Pending>().is_some()=>None,
@@ -88,5 +88,8 @@ impl BrowserJob {
  fn req(gates:&str,mode:&str)->String{json!({"circuit1":format!("OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[1];\n{}",gates.replace(';',";\n")),"circuit2":"OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[1];\n","mode":mode}).to_string()}
  #[test]fn symbolic_identity_is_not_labelled_general_certificate(){let j=BrowserJob::new(&req("h q[0]; h q[0];","hybrid")).unwrap();let v:Value=serde_json::from_str(&j.job()).unwrap();assert_eq!(v["report"]["distance_estimate"].as_f64(),Some(0.0));assert_eq!(v["report"]["certified_distance_interval"],false);}
  #[test]fn prepare_count_finish_and_reject_missing_count(){let j=BrowserJob::new(&req("h q[0]; h q[0];","wmc")).unwrap();let v:Value=serde_json::from_str(&j.job()).unwrap();assert!(v["cnf"].is_string());assert!(j.finish("").contains("error"));}
+ #[test]fn tiny_source_phase_is_not_replaced_by_unweighted_identity(){
+  let tiny=format!("u1(0.{}1) q[0];","0".repeat(399));let j=BrowserJob::new(&req(&tiny,"wmc")).unwrap();let v:Value=serde_json::from_str(&j.job()).unwrap();let cnf=v["cnf"].as_str().unwrap();assert!(cnf.contains("c p quprs-phase "));assert!(cnf.len()>400);assert!(j.finish("c s exact double prec-sci 2+0i").contains("acknowledge"));
+ }
  #[test]fn validation_and_transport_restore_on_error(){assert!(BrowserJob::new(&req("measure q[0];","wmc")).is_err());assert!(!browser_transport::active());assert!(BrowserJob::new(&req("","invalid")).is_err());assert!(!browser_transport::active());}
 }

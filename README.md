@@ -2,7 +2,7 @@
 
 This fork adds a local WebAssembly workbench to the original [QuPRS](https://github.com/PhysicsQoo/QuPRS) v0.16.0 Rust core, pinned at `0b28736651b3740ed3b201edd2efdef3da541e0d`. Original authorship and MIT license are retained. Browser integration was prepared with Codex.
 
-Browser numerical results are **not certified distance intervals**. The browser uses binary64 input weights and an actual MPFR GPMC worker, without the native MPFR input-weight bridge. RR can accept under its configured tolerance without computing a distance. The separate [PathsumWMC workbench](https://guluchen.github.io/PathsumWMC/) provides rigorously enclosed distance intervals.
+Browser numerical results are **not certified distance intervals**. The browser sends original rational phase descriptors to the actual MPFR GPMC worker, which runs the upstream MPFR source-weight bridge at its tolerance-selected 96–1024-bit precision. RR can accept under its configured tolerance without computing a distance. The separate [PathsumWMC workbench](https://guluchen.github.io/PathsumWMC/) provides rigorously enclosed distance intervals.
 
 See [browser source](web/), [port/rebuild scripts](scripts/web/) and [notices](NOTICE.md). Upstream automation is preserved under `.github/upstream-workflows/`; this fork runs only its browser workflows.
 

@@ -1,7 +1,7 @@
 // MIT licensed worker ownership / cancellation boundary for PathsumWMC.
 // The page owns every worker, so Stop/timeout explicitly terminates the solver
 // and its counter workers. No reliance on nested-worker lifetime propagation.
-export const runtimeVersion='20261115-quprs-mpfr-v1';
+export const runtimeVersion='20261115-quprs-source-mpfr-v2';
 export function createWorkerHost(root,engineRoot,timeoutMs=200000,options={}) {
   const WorkerCtor=options.WorkerCtor||Worker;
   const children=new Set();let settled=false,resolve,reject;

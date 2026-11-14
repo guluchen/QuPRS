@@ -54,6 +54,8 @@ jobs:
           python3 scripts/web/install-test-ganak.py "$RUNNER_TEMP/ganak-test/ganak-v2.8.0-linux-amd64.tar.gz" "$RUNNER_TEMP/ganak-test/ganak"
           export QUPRS_GANAK_PATH="$RUNNER_TEMP/ganak-test/ganak"
           mkdir -p "$RUNNER_TEMP/qa-results"
+          cc -shared -fPIC rust/quprs/native/mpfr_weight_bridge.c -lmpfr -lgmp -o "$RUNNER_TEMP/phase-reference.so"
+          python3 scripts/web/check-phase-weights.py prepare "$RUNNER_TEMP/phase-reference.so" "$QUPRS_GPMC_PATH" "$RUNNER_TEMP/qa-results/phase-reference.json"
           cargo test --locked --manifest-path rust/Cargo.toml -p quprs --features browser-transport --lib -- --test-threads=1 2>&1 | tee "$RUNNER_TEMP/qa-results/upstream-unit.log"
       - name: Actual browser and native differential checks
         env:
@@ -71,6 +73,7 @@ jobs:
           "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium
           core=$(python3 -c 'import os;print(min(os.sched_getaffinity(0)))')
           taskset -c "$core" node web/tests/counter.cjs
+          python3 scripts/web/check-phase-weights.py verify "$RUNNER_TEMP/qa-results/phase-results.json"
           taskset -c "$core" node web/tests/smoke.cjs
       - uses: actions/upload-artifact@v4
         if: always()
