@@ -1,0 +1,62 @@
+name: Frozen browser benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      core_run:
+        required: true
+      counter_run:
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 24
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SHARD: ${{ matrix.shard }}
+      SHARDS: 24
+      BENCH_OUT: ${{ runner.temp }}/results
+      BENCH_INPUT: ${{ runner.temp }}/inputs
+      QUWEB_DIST: ${{ runner.temp }}/site
+      QUWEB_NATIVE_CHECK: ${{ runner.temp }}/core/build-evidence/native-check
+      QUWEB_NATIVE_GPMC: ${{ runner.temp }}/counter/native-gpmc
+      QUWEB_PLAYWRIGHT: ${{ runner.temp }}/qa/node_modules/playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Freeze inputs and binaries
+        run: |
+          set -euo pipefail
+          for run in '${{ inputs.core_run }}' '${{ inputs.counter_run }}'; do gh run view "$run" --json conclusion --jq .conclusion | grep -x success; done
+          revision=$(gh run view '${{ inputs.core_run }}' --json headSha --jq .headSha)
+          git fetch --no-tags --depth=1 origin "$revision"
+          git diff --exit-code "$revision" HEAD -- rust
+          gh run download '${{ inputs.core_run }}' --name quprs-core --dir "$RUNNER_TEMP/core"
+          gh run download '${{ inputs.counter_run }}' --name quprs-gpmc --dir "$RUNNER_TEMP/counter"
+          python3 scripts/web/assemble.py "$RUNNER_TEMP/core" "$RUNNER_TEMP/counter" "$RUNNER_TEMP/site"
+          chmod +x "$QUWEB_NATIVE_CHECK" "$QUWEB_NATIVE_GPMC"
+          git clone --filter=blob:none --no-checkout https://github.com/PhysicsQoo/QuPRS.git "$BENCH_INPUT"
+          git -C "$BENCH_INPUT" checkout 60bcb250da4eb992f0b5f6727a5b6e57db8f0a84 -- benchmarks
+          sudo apt-get update -qq
+          sudo apt-get install -y libgmp-dev libmpfr-dev
+          npm install --prefix "$RUNNER_TEMP/qa" --no-save playwright@1.65.1
+          "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Paired serial timing on one pinned core
+        run: |
+          set -euo pipefail
+          core=$(python3 -c 'import os;print(min(os.sched_getaffinity(0)))')
+          taskset -c "$core" node benchmarks/browser/run.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-${{ matrix.shard }}
+          path: ${{ runner.temp }}/results

@@ -1,0 +1,771 @@
+{
+  "paper": "https://arxiv.org/abs/2604.24504",
+  "repository": "https://github.com/PhysicsQoo/QuPRS",
+  "revision": "60bcb250da4eb992f0b5f6727a5b6e57db8f0a84",
+  "snapshot_policy": "Last commit before arXiv submission date. Original paired files; no regenerated circuits or angle normalization.",
+  "modes": [
+    "hybrid",
+    "wmc"
+  ],
+  "counters": [
+    "gpmc",
+    "ganak"
+  ],
+  "precision_bits": 128,
+  "time_limit_seconds": 200,
+  "cases": [
+    {
+      "id": "MQTBench/ghz_nativegates_ibm_qiskit_opt0_128",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/ghz_nativegates_ibm_qiskit_opt0_128.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/ghz_nativegates_ibm_qiskit_opt0_128.qasm",
+      "sha256": {
+        "source": "345e217b8199c324d92e655a7282d810bd0620039ce59aaf6275575f0c4fd40c",
+        "transpiled": "2aad25337c8829adbdd589d54e50bb4084c9a79a3d09eac619daf28abec06f3c"
+      }
+    },
+    {
+      "id": "MQTBench/ghz_nativegates_ibm_qiskit_opt0_32",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/ghz_nativegates_ibm_qiskit_opt0_32.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/ghz_nativegates_ibm_qiskit_opt0_32.qasm",
+      "sha256": {
+        "source": "2e8196ef11f31d8bff5a9bbd08780c585521ca40a9f80930ccd606c32311d1c3",
+        "transpiled": "a39104ff974cfd99e4ea38e81822fbad47c67a865fc4b6deab985422fca4419c"
+      }
+    },
+    {
+      "id": "MQTBench/ghz_nativegates_ibm_qiskit_opt0_64",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/ghz_nativegates_ibm_qiskit_opt0_64.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/ghz_nativegates_ibm_qiskit_opt0_64.qasm",
+      "sha256": {
+        "source": "04d5dec48eb3390fb94e810f83f48572509de9d6f8df77ec3ca6473cf65653a4",
+        "transpiled": "43b229c7bac9be18b4721e4a18cf4e0966ea5ae2971e4ca1ca7ca3b9416a5cb8"
+      }
+    },
+    {
+      "id": "MQTBench/graphstate_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/graphstate_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/graphstate_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "cf068868f970e553ac9a8fb4998c7c2a6a2e3e6e7a437e3a636f477e34682e36",
+        "transpiled": "d2c38d1663dc26757ecb09748918be41c0064cc67bc52d4d7c1c2dfc3fbdd1c9"
+      }
+    },
+    {
+      "id": "MQTBench/graphstate_nativegates_ibm_qiskit_opt0_32",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/graphstate_nativegates_ibm_qiskit_opt0_32.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/graphstate_nativegates_ibm_qiskit_opt0_32.qasm",
+      "sha256": {
+        "source": "34a670c77f7b8ba0ffa7290f5ec349936f87ab02c5482fcabd6e03c8cb281aea",
+        "transpiled": "943fedccf510646e6203d8fe0d134cfaab4cc75c8beeada57bb2369243ffc653"
+      }
+    },
+    {
+      "id": "MQTBench/graphstate_nativegates_ibm_qiskit_opt0_64",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/graphstate_nativegates_ibm_qiskit_opt0_64.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/graphstate_nativegates_ibm_qiskit_opt0_64.qasm",
+      "sha256": {
+        "source": "a6eb00805919afe0b0970bf67aa6e7ad275d37e491133aa380d11647750e54db",
+        "transpiled": "3b1b61914a84c159e2dbd00fe9c4360c22a7814d3d6200ea3156f0e2acf7d417"
+      }
+    },
+    {
+      "id": "MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_4",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_4.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/grover-noancilla_nativegates_ibm_qiskit_opt0_4.qasm",
+      "sha256": {
+        "source": "f64bc99e09b5ac3aebd569505c38bae27beee38c2de5f89b96ecc91e4af7c9d9",
+        "transpiled": "6bdbc083e4b92c4de9f2a007f8695af739bb7aabf9f11c5bb7cbcd530055d537"
+      }
+    },
+    {
+      "id": "MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_5",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_5.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/grover-noancilla_nativegates_ibm_qiskit_opt0_5.qasm",
+      "sha256": {
+        "source": "cfb6249443b1f5adede131d0b618285ea5d469d0e2b54c6129301b6830d2b0a3",
+        "transpiled": "6804c96612b20df26b059f2c35ef7866bcddd89d49486be3a7e5e5ccde3b516d"
+      }
+    },
+    {
+      "id": "MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_6",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/grover-noancilla_nativegates_ibm_qiskit_opt0_6.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/grover-noancilla_nativegates_ibm_qiskit_opt0_6.qasm",
+      "sha256": {
+        "source": "eaaeb3dd38e0f9020b38bcfc9d3987d48f564728d370d18b3afe11b2ecd044a7",
+        "transpiled": "ef651fc88ce87ae417a7f84e3af600f09cdcf0fad80abbeb04d613964d08d361"
+      }
+    },
+    {
+      "id": "MQTBench/qaoa_nativegates_ibm_qiskit_opt0_11",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qaoa_nativegates_ibm_qiskit_opt0_11.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qaoa_nativegates_ibm_qiskit_opt0_11.qasm",
+      "sha256": {
+        "source": "ab6e4f800de4405f482461c3c6d32f31ee85d1599bce45a57b70414a6974db9a",
+        "transpiled": "87dc5b296ad60b681cb9e5a98cd5525b615e6c57bd1872edb6b3939e9aed5c44"
+      }
+    },
+    {
+      "id": "MQTBench/qaoa_nativegates_ibm_qiskit_opt0_7",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qaoa_nativegates_ibm_qiskit_opt0_7.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qaoa_nativegates_ibm_qiskit_opt0_7.qasm",
+      "sha256": {
+        "source": "1e54b95b2caa399f8f5c49b17a9868c4baf730ab1194d85dca3733cec92a5b5e",
+        "transpiled": "1de38650301052c4385ee9ed389c0ea2bcbb87acaf0628f753186669a8313a79"
+      }
+    },
+    {
+      "id": "MQTBench/qaoa_nativegates_ibm_qiskit_opt0_9",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qaoa_nativegates_ibm_qiskit_opt0_9.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qaoa_nativegates_ibm_qiskit_opt0_9.qasm",
+      "sha256": {
+        "source": "870bb0c73f92406927676c80dc5dfb2b52b3df24f4082289ced293705df50502",
+        "transpiled": "bd55008f4fa00b8251c1ab0b1226cbea38b2818b80a8340a01d9d5bb62d49fb6"
+      }
+    },
+    {
+      "id": "MQTBench/qft_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qft_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qft_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "39b6889497a4e98098b6bb2b4563ace2fb660f4cc3fe8d0763d3f69fc200d865",
+        "transpiled": "aa85188d731454bd85b0fe2ae089ab8e6b812501730eee5f1651ac11d7b7fcbc"
+      }
+    },
+    {
+      "id": "MQTBench/qft_nativegates_ibm_qiskit_opt0_20",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qft_nativegates_ibm_qiskit_opt0_20.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qft_nativegates_ibm_qiskit_opt0_20.qasm",
+      "sha256": {
+        "source": "a80541cefa7de60ad0c49bf3277edbd2f9cacecdef186114c14f75a11f88bfb9",
+        "transpiled": "c022adb37206f5b21b617136d1df369af588ac43b88fc65843d4b2ca402dab13"
+      }
+    },
+    {
+      "id": "MQTBench/qft_nativegates_ibm_qiskit_opt0_22",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qft_nativegates_ibm_qiskit_opt0_22.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qft_nativegates_ibm_qiskit_opt0_22.qasm",
+      "sha256": {
+        "source": "5d082b45c74ef9d075d657314e33864adc00928f2737b458d2743b2333fd8a54",
+        "transpiled": "749570a67457c0b53a221974f73c4f9d8151d4ba23a4e66cb922286e7763df8f"
+      }
+    },
+    {
+      "id": "MQTBench/qft_nativegates_ibm_qiskit_opt0_24",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qft_nativegates_ibm_qiskit_opt0_24.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qft_nativegates_ibm_qiskit_opt0_24.qasm",
+      "sha256": {
+        "source": "9294728f34d8c0eecddf57af543dce9f9db8e64d037f7982e636ece0bf0d7a99",
+        "transpiled": "0bf8864a23461723ed575b6632b11e835a2486a2502500461a1aa1845b9f9765"
+      }
+    },
+    {
+      "id": "MQTBench/qnn_nativegates_ibm_qiskit_opt0_12",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qnn_nativegates_ibm_qiskit_opt0_12.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qnn_nativegates_ibm_qiskit_opt0_12.qasm",
+      "sha256": {
+        "source": "fd903500b07a063d664b23327fd7702339a0d1057cfbf2ac15e7d47c438863dd",
+        "transpiled": "63e950c24ad9cf1c9842aee8c40e730e7289544132c3f5c7f4829851c1780df3"
+      }
+    },
+    {
+      "id": "MQTBench/qnn_nativegates_ibm_qiskit_opt0_4",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qnn_nativegates_ibm_qiskit_opt0_4.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qnn_nativegates_ibm_qiskit_opt0_4.qasm",
+      "sha256": {
+        "source": "f76af749135c82f3f4fe8c72fc217e6db63d0421637aecc5ac06b78584c1e0f4",
+        "transpiled": "4d83b6a6aaed9ff67afadb391568410cc381ca1251a423720bb547d48add5f27"
+      }
+    },
+    {
+      "id": "MQTBench/qnn_nativegates_ibm_qiskit_opt0_8",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qnn_nativegates_ibm_qiskit_opt0_8.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qnn_nativegates_ibm_qiskit_opt0_8.qasm",
+      "sha256": {
+        "source": "814fb55735b75d952b99d0768b9287c623aa3b49bf8742198334a6d9e4403d9d",
+        "transpiled": "15bc243cce22c2e3714df3baa073fc29334b1f090631b38d2d37a1d8cb2cebf4"
+      }
+    },
+    {
+      "id": "MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeexact_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "6d9d97c0e92b6aa126b9547c4b81f895e752a1ed9af7855e2799f86d5241ccc3",
+        "transpiled": "2cea67fd9e6a40d95cfe11b4e03b9a20388a391059219cbdcc8f4fdba5fb29d2"
+      }
+    },
+    {
+      "id": "MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_20",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_20.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeexact_nativegates_ibm_qiskit_opt0_20.qasm",
+      "sha256": {
+        "source": "c90b5aa8a03d84bcdee505f167b69a93eb17c063ce5cb4916145c7a2296a2831",
+        "transpiled": "620a6bf48a008656e60d2d78a3d80d8ec49ca4682a07de074048fdf67f4840a7"
+      }
+    },
+    {
+      "id": "MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_24",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_24.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeexact_nativegates_ibm_qiskit_opt0_24.qasm",
+      "sha256": {
+        "source": "7cf35f505f5c1aa5a744bb2277f39b46b6bf263a1c394652f1ea1b9b04091bed",
+        "transpiled": "bb9af093ef8e09753a897c173fdfbf1ef7c6d444a91c1db0f166f6769a7a7abf"
+      }
+    },
+    {
+      "id": "MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_8",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeexact_nativegates_ibm_qiskit_opt0_8.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeexact_nativegates_ibm_qiskit_opt0_8.qasm",
+      "sha256": {
+        "source": "8d514d06f7c9e81abda1042796cc34227624c9ed66097bee1ce5e97a87884dda",
+        "transpiled": "227ab45a4eb033889aa57bb53e54938e74d757fea30eaa3d276b495048dc6141"
+      }
+    },
+    {
+      "id": "MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeinexact_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "612dd1f1c213b95d525b88a48da13ddda55696469652b0b1265307cfb5600b44",
+        "transpiled": "1edeaf8108d55c20b45bf6fa1fe0fae5b5fb2493c5e1a003eb9db410dc775b8e"
+      }
+    },
+    {
+      "id": "MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_20",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_20.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeinexact_nativegates_ibm_qiskit_opt0_20.qasm",
+      "sha256": {
+        "source": "1aab3d61462144fc59ace2ffda5d2382776aec4bf5f1bacdb8ac31ee7400751c",
+        "transpiled": "3d8370285c872197c45853c0ebe96be09ef08eabe998da48d426de80e54aeb82"
+      }
+    },
+    {
+      "id": "MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_24",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_24.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeinexact_nativegates_ibm_qiskit_opt0_24.qasm",
+      "sha256": {
+        "source": "963434a6a990fd83bd8cedd44d2fd2bc76d15206883f3e37ce68ff867ef23dc9",
+        "transpiled": "66c9eeadbe838e38b18003ef6c32daa1b61a4f6cef2736381895593d2ae4e846"
+      }
+    },
+    {
+      "id": "MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_8",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qpeinexact_nativegates_ibm_qiskit_opt0_8.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qpeinexact_nativegates_ibm_qiskit_opt0_8.qasm",
+      "sha256": {
+        "source": "ce85b852f0b5918d0e067967a500003934867879a428242aa54dc16c0bf53703",
+        "transpiled": "dcb05342f86dc7173985ec478d1a7e5e543da856a0d6d9e7aabf311c965357d6"
+      }
+    },
+    {
+      "id": "MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_3",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_3.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qwalk-noancilla_nativegates_ibm_qiskit_opt0_3.qasm",
+      "sha256": {
+        "source": "222dc90a8f82826527fb7b6d3c2cd657675d45461a94f8eb7988f92faf0422ed",
+        "transpiled": "4c551372529fadb85aa375f6dfb64323eb84f91081700b0af2fa560a0d6e8a0e"
+      }
+    },
+    {
+      "id": "MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_4",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_4.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qwalk-noancilla_nativegates_ibm_qiskit_opt0_4.qasm",
+      "sha256": {
+        "source": "a3f074906d631366b9de34d3aa372e3161fadf31730ddece0df56b7b9d0bda04",
+        "transpiled": "415bd9f289f78c4fec0137b31c06ca5263ee729a9a0add211e590f516b91d56c"
+      }
+    },
+    {
+      "id": "MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_5",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/qwalk-noancilla_nativegates_ibm_qiskit_opt0_5.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/qwalk-noancilla_nativegates_ibm_qiskit_opt0_5.qasm",
+      "sha256": {
+        "source": "91615d04fd301e581bdd5631adfc4378ecc5bdb88c49e4018a35c70e5ba43c91",
+        "transpiled": "68fa35d2dd38faf811ac6e8b1fa9e8f57c0949f2a6bb261ee9374bf7243f3bb3"
+      }
+    },
+    {
+      "id": "MQTBench/vqe_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/vqe_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/vqe_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "e07da062ab05cbbf38828e7dfa4b1617f6e2a755f955307e3e2f6c979f0697a5",
+        "transpiled": "81df3d29f12f06095129a27c06f79c833b84e576e0f7303e3a477aff8d6a52fb"
+      }
+    },
+    {
+      "id": "MQTBench/vqe_nativegates_ibm_qiskit_opt0_4",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/vqe_nativegates_ibm_qiskit_opt0_4.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/vqe_nativegates_ibm_qiskit_opt0_4.qasm",
+      "sha256": {
+        "source": "757e5714303e731bebc156c230024480b1d72df503d70dd0a9eb76d112ffdd62",
+        "transpiled": "5fb000fa312acaa32a9f09abde96dc9e9adcab4652a31cef9baeec4929e75761"
+      }
+    },
+    {
+      "id": "MQTBench/vqe_nativegates_ibm_qiskit_opt0_8",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/vqe_nativegates_ibm_qiskit_opt0_8.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/vqe_nativegates_ibm_qiskit_opt0_8.qasm",
+      "sha256": {
+        "source": "7a09dfcd231d4ef6932ac988ee7db18895a932428cfbbaa69498e19d2962515b",
+        "transpiled": "b4ed8565f2dae2fbbf1cfa00be1ea40d6d921bdeb9843780278ea62931dccebf"
+      }
+    },
+    {
+      "id": "MQTBench/wstate_nativegates_ibm_qiskit_opt0_16",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/wstate_nativegates_ibm_qiskit_opt0_16.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/wstate_nativegates_ibm_qiskit_opt0_16.qasm",
+      "sha256": {
+        "source": "c02981a497a5a7e0e4fc78c5c54c201b0970a0ef9eb03b2206055a09c800643d",
+        "transpiled": "c1522afc4a31d8e8a6462fece11551055e104240191823d6290f4ac0020557bc"
+      }
+    },
+    {
+      "id": "MQTBench/wstate_nativegates_ibm_qiskit_opt0_32",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/wstate_nativegates_ibm_qiskit_opt0_32.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/wstate_nativegates_ibm_qiskit_opt0_32.qasm",
+      "sha256": {
+        "source": "02660362fa9d16fd15ee98459357b35ff2fd5d51cf9437a76b91974016c5404a",
+        "transpiled": "e5dfda93e4108b7888939281c4a0768e2b56776e18a9c4d7fa5eaaf3637fe530"
+      }
+    },
+    {
+      "id": "MQTBench/wstate_nativegates_ibm_qiskit_opt0_4",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/wstate_nativegates_ibm_qiskit_opt0_4.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/wstate_nativegates_ibm_qiskit_opt0_4.qasm",
+      "sha256": {
+        "source": "67df82fe7a72fe7b405046de061f4af875f1f4a25695eb47472cf85611b38684",
+        "transpiled": "cf44fbda3aa25a8b9c0fea042dc327b3d44a3506eceda84a26776ba783a50ea5"
+      }
+    },
+    {
+      "id": "MQTBench/wstate_nativegates_ibm_qiskit_opt0_8",
+      "family": "MQTBench",
+      "source": "benchmarks/MQTBench/wstate_nativegates_ibm_qiskit_opt0_8.qasm",
+      "transpiled": "benchmarks/MQTBench/h,ry,rz,cx/wstate_nativegates_ibm_qiskit_opt0_8.qasm",
+      "sha256": {
+        "source": "fee4d0c68b92940a4eee6f18525c5cdcdbbb83a818c0d2df1e6abe8fb0c044cb",
+        "transpiled": "673769a5b211534250f4fe3c7dcd7a9e67f0ce5fd74104e2998eb41ad4216e4c"
+      }
+    },
+    {
+      "id": "Feynman/adder_8",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/adder_8.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/adder_8.qasm",
+      "sha256": {
+        "source": "82eea416000bdf4b4f00823d5d3d5f9d2f2852b32ce82e39fec02b882ca24d13",
+        "transpiled": "6c318c0865757ea307beb1f382e9c1f8c53d1fa41c36635a7060bcc008ea51cb"
+      }
+    },
+    {
+      "id": "Feynman/barenco_tof_10",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/barenco_tof_10.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/barenco_tof_10.qasm",
+      "sha256": {
+        "source": "6b6294651b862f1ad550c149bf7d40f166ab3ed0d8d3d176337074f3980902ee",
+        "transpiled": "9cc29f603c3d4b0ebfae5dc711af6b99c74ff2ee74d15aadccf5cdf33049cf90"
+      }
+    },
+    {
+      "id": "Feynman/barenco_tof_3",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/barenco_tof_3.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/barenco_tof_3.qasm",
+      "sha256": {
+        "source": "6913a18024094864139fc782419ebfa498b54486adedaf2451af4eccadaecaa5",
+        "transpiled": "9860c6a4f832fe7681856b3ce6f3d3b069718e678a1cec0cfc0c765ed68196aa"
+      }
+    },
+    {
+      "id": "Feynman/barenco_tof_4",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/barenco_tof_4.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/barenco_tof_4.qasm",
+      "sha256": {
+        "source": "9af0895aa14872eeafae773852ac8359bfa830d675b873bf152bcd89dae387e1",
+        "transpiled": "f8e832b8018b43becce24bc6ebaebc89a4b8a2510987f8b6dc9b720c27a0147a"
+      }
+    },
+    {
+      "id": "Feynman/barenco_tof_5",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/barenco_tof_5.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/barenco_tof_5.qasm",
+      "sha256": {
+        "source": "440b1858934ced233dc990e1507ddb4cdf1ed899a85dc674ddf4bfdc7411b43e",
+        "transpiled": "7d093abffce355e04b5c296941ecee6e4559373262ed9d292345d3454375d293"
+      }
+    },
+    {
+      "id": "Feynman/csla_mux_3",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/csla_mux_3.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/csla_mux_3.qasm",
+      "sha256": {
+        "source": "197f68bfba0de75e4e5b2b014a1fbc52b79c27f4ff80d886a624b62ca5c429b4",
+        "transpiled": "97c4929cdeb456d215eeea4394bc36558559d86ac6e0da558b6312dfb74ed893"
+      }
+    },
+    {
+      "id": "Feynman/csum_mux_9",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/csum_mux_9.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/csum_mux_9.qasm",
+      "sha256": {
+        "source": "2af256ad36df5df095c999832fd29b29f2d2f51d3ef1387ec899d939cc7792c8",
+        "transpiled": "8e37d7d82b46e06ad6539225fd3ae76499bbb68c3477b0f1da6e5f229ead401f"
+      }
+    },
+    {
+      "id": "Feynman/gf2^10_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^10_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^10_mult.qasm",
+      "sha256": {
+        "source": "dc497f1ba477278dcf66adfb1b3c7690805a793d89fe7df54d6ebabb68678d5a",
+        "transpiled": "199537aaf019feb496c05fa682819411711dba18fb76b5a192c99b81c2829f7b"
+      }
+    },
+    {
+      "id": "Feynman/gf2^16_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^16_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^16_mult.qasm",
+      "sha256": {
+        "source": "96951ac215509c0553f67f7dfa0e978063aff72f6c5d7d92cb65608d5d701ef1",
+        "transpiled": "ae3d5883f382816d9e557fff8c4982d733aa65e50e7273bff789f673d080de43"
+      }
+    },
+    {
+      "id": "Feynman/gf2^32_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^32_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^32_mult.qasm",
+      "sha256": {
+        "source": "60d7888228a5415b76504bf6a1acb91dc8ce57d894500494c136e9989f22b7b2",
+        "transpiled": "0d10144c475a672446152a5a1d228c890dd1aa54d2f8795d11fa8632764bb741"
+      }
+    },
+    {
+      "id": "Feynman/gf2^4_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^4_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^4_mult.qasm",
+      "sha256": {
+        "source": "f3a787e9044b62fa616f39a2520ec0661f7233b1d9aa21404eb1ce87200e81af",
+        "transpiled": "c63fe9a90547de3d532ea9343c52c714ab6e6fd098f1afa2764cce83f7c6799b"
+      }
+    },
+    {
+      "id": "Feynman/gf2^5_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^5_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^5_mult.qasm",
+      "sha256": {
+        "source": "13d6539fe10cce1835535ab762d2b5c7cf67c43951031e06b643fd5a451bb1ee",
+        "transpiled": "f8b794fee5ca05e8b310ea0021bae2e153730979601e237b219b2863896d2daa"
+      }
+    },
+    {
+      "id": "Feynman/gf2^64_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^64_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^64_mult.qasm",
+      "sha256": {
+        "source": "9614cac69f6b0493ee9422bb8c8646933bb6c2df38fb86fdad2a74b5dcd38004",
+        "transpiled": "e2048f1c4012f0e7d91749699cd404276c7f25af239e7d1bc8880b1fb7ca501f"
+      }
+    },
+    {
+      "id": "Feynman/gf2^6_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^6_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^6_mult.qasm",
+      "sha256": {
+        "source": "2b71c4ca2234dfc28af85bfa281f1ac14b03a121a7b5d33869f8f0d7c457c4a0",
+        "transpiled": "1ceca583fe025dd5e551b38f20bf8cb81bd373de4036e5794324bbd7377b0474"
+      }
+    },
+    {
+      "id": "Feynman/gf2^7_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^7_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^7_mult.qasm",
+      "sha256": {
+        "source": "176524e406ac82875cb9912b0899fda9977803368f1a63e7ddd0e3f8ea50b5b8",
+        "transpiled": "1bb26a623b198c1653caa3b67620ec11645e54e13e3d73a2fa6aefadf61d42fe"
+      }
+    },
+    {
+      "id": "Feynman/gf2^8_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^8_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^8_mult.qasm",
+      "sha256": {
+        "source": "703761a6de348f373c6ecb0203b0ddc7279f26490a9b27b2728bfe25d2fff7ae",
+        "transpiled": "4e7e4f242a80d1a93294cfcec35c015e6d07fa73bea592dc06049e39ef2368d0"
+      }
+    },
+    {
+      "id": "Feynman/gf2^9_mult",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/gf2^9_mult.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/gf2^9_mult.qasm",
+      "sha256": {
+        "source": "1f26a127eac933df4733a522031c4dcbfda2f7a65d7106838ff851b83fa271a3",
+        "transpiled": "36d47d63d1dd32bb173556979f8359cf95a2840035aa7aad2b17bbefa2d63560"
+      }
+    },
+    {
+      "id": "Feynman/grover_5",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/grover_5.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/grover_5.qasm",
+      "sha256": {
+        "source": "dccb7c3a0e4811e8b30af7d1ae5186e9e628ab5a2c8d70d88aa7868b9dc434de",
+        "transpiled": "c197c9cdf2f77037adf22259789e04a0fed260700295175179d098acc258e6d5"
+      }
+    },
+    {
+      "id": "Feynman/ham15-high",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/ham15-high.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/ham15-high.qasm",
+      "sha256": {
+        "source": "b09df3a4de8f24f5b94e1571d5d6ab660a758b43599ba1b139d8ef8fd67f8017",
+        "transpiled": "9dc1b5ebb493758703cccf8d2beede0c1aca026923f231b73ce98d9fd7a5d091"
+      }
+    },
+    {
+      "id": "Feynman/ham15-low",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/ham15-low.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/ham15-low.qasm",
+      "sha256": {
+        "source": "98a9955b582e435aadd12fb5a0b4fe6c697087a98df5c1176e85369028dc479b",
+        "transpiled": "00d8fd219ff3b0d645cbda073cc70a94c52fd0cbd80b8b2de1e8a4aa4c752ad4"
+      }
+    },
+    {
+      "id": "Feynman/ham15-med",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/ham15-med.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/ham15-med.qasm",
+      "sha256": {
+        "source": "f64b0192faafa79cbb9621ef163fae1eadcea2974f16a518fa99e8cb4447ae90",
+        "transpiled": "3e11a985f2dffb10a2234ce589196f150209538ff3c56a597952fdf2bb8a539f"
+      }
+    },
+    {
+      "id": "Feynman/hwb6",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/hwb6.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/hwb6.qasm",
+      "sha256": {
+        "source": "d25c212f08434476465b0e0534ee541574e6a0595b23914a04f46d9d7901a50d",
+        "transpiled": "af58b59fef66b334d04b434f39b2c308ffc45a125410264ae426c688b4da8731"
+      }
+    },
+    {
+      "id": "Feynman/mod5_4",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/mod5_4.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/mod5_4.qasm",
+      "sha256": {
+        "source": "c277690c4715fc8241062a142b30770c3b50a197d3f1ee8722881c1f6510656e",
+        "transpiled": "e8bc957ff8fda7ca2d8434b99f1355bc8e3f64602830b0aac2710ec49bbe9d16"
+      }
+    },
+    {
+      "id": "Feynman/mod_adder_1024",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/mod_adder_1024.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/mod_adder_1024.qasm",
+      "sha256": {
+        "source": "8204d99a83aeae2f7e5f1ed781974ea777fdf05723512602699a0a371fe05171",
+        "transpiled": "9e710a4aa59fe1614d84b78bc01d306fdd2978a73bb2733fd1776c9e7885ba4c"
+      }
+    },
+    {
+      "id": "Feynman/mod_mult_55",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/mod_mult_55.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/mod_mult_55.qasm",
+      "sha256": {
+        "source": "331cdd418872c0f2e627b83e7a72ecf95ec78630f294459563d92bef4c46c0fe",
+        "transpiled": "bcea517c3eb6340ae5a35c3f19a3e301370287d5e38d1f0bac023845e4f554ef"
+      }
+    },
+    {
+      "id": "Feynman/mod_red_21",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/mod_red_21.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/mod_red_21.qasm",
+      "sha256": {
+        "source": "d0c8553e0687e6e1c5fb9dd9ab0ba8b9dbce2dec869b08c41bdcbdbcf4590368",
+        "transpiled": "48706d25c9f359ef77efad20a7b71aaa558ddc74e700ad73c199f31f7f8deb47"
+      }
+    },
+    {
+      "id": "Feynman/qcla_adder_10",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/qcla_adder_10.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/qcla_adder_10.qasm",
+      "sha256": {
+        "source": "67204260c5abc16cf31e2a40a276b2af6f8234c7178ec6189d7f6005d4cfd00f",
+        "transpiled": "629956fad43a997794c418b5ba5a78564d069d8f8d7bd6cf332b5811eea69f69"
+      }
+    },
+    {
+      "id": "Feynman/qcla_com_7",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/qcla_com_7.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/qcla_com_7.qasm",
+      "sha256": {
+        "source": "d02717914bf21b68fd1aa24afaebf80c0fc9338ede537777cc870e25120c1905",
+        "transpiled": "726ce8bea22eadf6b60b0c734c9820aae8484f62d91349798c842041b6dd5338"
+      }
+    },
+    {
+      "id": "Feynman/qcla_mod_7",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/qcla_mod_7.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/qcla_mod_7.qasm",
+      "sha256": {
+        "source": "fc79b7bc69d5153f326071c41e35a8a242bb15b0cbf264b741e524fd5c92bac0",
+        "transpiled": "b9941c44ba6bdae32048448c7e3ad2624e528307ded4d11b147c4be6ef6f1648"
+      }
+    },
+    {
+      "id": "Feynman/qft_4",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/qft_4.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/qft_4.qasm",
+      "sha256": {
+        "source": "18fd1e92625844f482a3adc77c6980fe009409e1630b9da205aa70177e37ced5",
+        "transpiled": "184db450a3178e9e178aef9e9757b337d2f5069b2119b4ba6f38beade681a208"
+      }
+    },
+    {
+      "id": "Feynman/rc_adder_6",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/rc_adder_6.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/rc_adder_6.qasm",
+      "sha256": {
+        "source": "b7fff2267fe08799a7b50eb69a27c498fd890ca3e965cca16a1ad7b121179174",
+        "transpiled": "48bb77bad657988a60f5b89004e2c7874f4128a75974f2146be070803c1c2d9e"
+      }
+    },
+    {
+      "id": "Feynman/tof_10",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/tof_10.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/tof_10.qasm",
+      "sha256": {
+        "source": "9eb83815d7311c8ec758b6ad9c37f2af9dd13a7a77d301b16f3d33a1442ca3f6",
+        "transpiled": "219d02ea14236a0026c89f69ba0f928c59e01dcf7ac2ed7d81b7d4663996bf61"
+      }
+    },
+    {
+      "id": "Feynman/tof_3",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/tof_3.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/tof_3.qasm",
+      "sha256": {
+        "source": "68903280e338ac920da6177eef589267c416e23c63babd33442724e3dc2b21f1",
+        "transpiled": "77371ca4ec2834940ec0748f0a8e6e1fabc00b77ec2e300b32a6f8f8c905dc3e"
+      }
+    },
+    {
+      "id": "Feynman/tof_4",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/tof_4.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/tof_4.qasm",
+      "sha256": {
+        "source": "41bf670cc96f749419ab8fa29753c4dbf1cbc5803cbdcd73f633989a0118fe3f",
+        "transpiled": "183161d3f70fe0581aadd57731aee52c289307542948096599ed689ff815fb27"
+      }
+    },
+    {
+      "id": "Feynman/tof_5",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/tof_5.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/tof_5.qasm",
+      "sha256": {
+        "source": "97307839a9b339737cb082cbd6de2e82306b63d6cf438d6165a33fb1d11ef57f",
+        "transpiled": "15aad1ee287cab851bd3ea8367e2bd982790e96a130f12ce08d5ba605f7e9d2e"
+      }
+    },
+    {
+      "id": "Feynman/vbe_adder_3",
+      "family": "Feynman",
+      "source": "benchmarks/Feynman/vbe_adder_3.qasm",
+      "transpiled": "benchmarks/Feynman/h,y,z,t,tdg,cx/vbe_adder_3.qasm",
+      "sha256": {
+        "source": "661014e32278b9dc2193d5342838c3c8050cd98e6f49f456af7c77612826efdb",
+        "transpiled": "dd8689c2d7f4dc5b21a01586101763041ec85f401867143b900d1254b64722eb"
+      }
+    }
+  ],
+  "cohort_settings": {
+    "MQTBench": "Hybrid and WMC, GPMC and GANAK, 200 s whole-request screen",
+    "Feynman": "Reduction-only, 80 s paper RR reference; this browser screen uses the common 200 s whole-request cap"
+  },
+  "engine_settings": {
+    "gpmc": [
+      "-mode=1",
+      "-cs=64"
+    ],
+    "ganak": [
+      "--mode",
+      "2",
+      "--prob",
+      "0",
+      "--maxcache",
+      "128",
+      "--verb",
+      "0",
+      "--arjunverb",
+      "0"
+    ]
+  },
+  "resource_clock": "Browser port uses worker-local monotonic elapsed time for solver resource budgets; no OS CPU/RSS counters are claimed."
+}
