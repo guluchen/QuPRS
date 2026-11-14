@@ -1,0 +1,99 @@
+name: Validate and publish browser
+on:
+  workflow_dispatch:
+    inputs:
+      core_run:
+        description: Successful blocking-tested Rust core build
+        required: true
+        default: '43617230089'
+      counter_run:
+        description: Successful original MPFR counter build
+        required: true
+        default: '43616287735'
+      deploy:
+        description: Publish only after all checks pass
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      QUPRS_SOLVER_PROVISION: external
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Freeze tested binaries and verify source identity
+        run: |
+          set -euo pipefail
+          gh run view '${{ inputs.core_run }}' --json conclusion --jq .conclusion | grep -x success
+          gh run view '${{ inputs.counter_run }}' --json conclusion --jq .conclusion | grep -x success
+          revision=$(gh run view '${{ inputs.core_run }}' --json headSha --jq .headSha)
+          git fetch --no-tags --depth=1 origin "$revision"
+          git diff --exit-code "$revision" HEAD -- rust
+          gh run download '${{ inputs.core_run }}' --name quprs-core --dir "$RUNNER_TEMP/core"
+          gh run download '${{ inputs.counter_run }}' --name quprs-gpmc --dir "$RUNNER_TEMP/counter"
+          python3 scripts/web/assemble.py "$RUNNER_TEMP/core" "$RUNNER_TEMP/counter" "$RUNNER_TEMP/site"
+          python3 scripts/web/check-wasm-limits.py "$RUNNER_TEMP/site/pkg/quprs_web_bg.wasm" "$RUNNER_TEMP/site/engines/gpmc.wasm" > "$RUNNER_TEMP/site/engines/MEMORY_LIMITS.json"
+          chmod +x "$RUNNER_TEMP/core/build-evidence/native-check" "$RUNNER_TEMP/counter/native-gpmc"
+      - name: Native upstream unit suite in the default numerical profile
+        env:
+          QUPRS_GPMC_PATH: ${{ runner.temp }}/counter/native-gpmc
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y libgmp-dev libmpfr-dev zlib1g-dev
+          mkdir -p "$RUNNER_TEMP/qa-results"
+          cargo test --locked --manifest-path rust/Cargo.toml -p quprs --features browser-transport --lib -- --test-threads=1 2>&1 | tee "$RUNNER_TEMP/qa-results/upstream-unit.log"
+      - name: Actual browser and native differential checks
+        env:
+          QUWEB_DIST: ${{ runner.temp }}/site
+          QUWEB_NATIVE_CHECK: ${{ runner.temp }}/core/build-evidence/native-check
+          QUWEB_NATIVE_GPMC: ${{ runner.temp }}/counter/native-gpmc
+          QUWEB_QA_OUT: ${{ runner.temp }}/qa-results
+          QUWEB_PLAYWRIGHT: ${{ runner.temp }}/qa/node_modules/playwright
+        run: |
+          set -euo pipefail
+          node --check web/app.js
+          node --check web/worker.js
+          node web/tests/host.cjs
+          npm install --prefix "$RUNNER_TEMP/qa" --no-save playwright@1.65.1
+          "$RUNNER_TEMP/qa/node_modules/.bin/playwright" install --with-deps chromium
+          core=$(python3 -c 'import os;print(min(os.sched_getaffinity(0)))')
+          taskset -c "$core" node web/tests/counter.cjs
+          taskset -c "$core" node web/tests/smoke.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-validation
+          path: ${{ runner.temp }}/qa-results
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tested-browser-site
+          path: ${{ runner.temp }}/site
+      - uses: actions/configure-pages@v5
+        if: inputs.deploy
+      - uses: actions/upload-pages-artifact@v3
+        if: inputs.deploy
+        with:
+          path: ${{ runner.temp }}/site
+  deploy:
+    if: inputs.deploy
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

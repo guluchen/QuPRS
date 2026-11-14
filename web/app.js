@@ -1,11 +1,11 @@
 import {createWorkerHost} from './engines/host.js';
-const $=id=>document.getElementById(id);let host,last;
-function busy(value){$('inputs').disabled=value;$('run').disabled=value;$('stop').disabled=!value}
+const $=id=>document.getElementById(id);let host,last,pendingUploads=0;
+function busy(value){$('inputs').disabled=value;$('run').disabled=value||pendingUploads>0;$('stop').disabled=!value}
 function setPair(a,b,n=1){const pre=`OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[${n}];\n`;$('left').value=pre+a;$('right').value=pre+b}
 $('identity').onclick=()=>setPair('h q[0];\nh q[0];','');
 $('phase').onclick=()=>setPair('u1(0.000001) q[0];','');
 $('cz').onclick=()=>setPair('cz q[0],q[1];','h q[1];\ncx q[0],q[1];\nh q[1];',2);
-for(const side of ['left','right'])$(side+'File').onchange=async e=>{const file=e.target.files[0];if(file)$(side).value=await file.text()};
+for(const side of ['left','right'])$(side+'File').onchange=async e=>{const file=e.target.files[0];if(!file)return;pendingUploads++;$('run').disabled=true;try{$(side).value=await file.text()}finally{pendingUploads--;$('run').disabled=Boolean(host)||pendingUploads>0}};
 $('stop').onclick=()=>host?.cancel();
 $('form').onsubmit=async e=>{
  e.preventDefault();last=null;$('download').disabled=true;$('distance').textContent='—';$('verdict').textContent='';$('warning').textContent='';$('timing').textContent='';$('report').textContent='';
