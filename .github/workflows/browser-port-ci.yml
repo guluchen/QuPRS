@@ -91,6 +91,8 @@ jobs:
         with:
           name: quprs-gpmc
           path: ${{ runner.temp }}/counter
+      - name: Validate workflow syntax
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 -shellcheck= -pyflakes= .github/workflows/browser-workbench.yml
       - name: Assemble exact tested binaries and sources
         run: |
           set -euo pipefail
@@ -99,6 +101,10 @@ jobs:
           chmod +x "$RUNNER_TEMP/core/build-evidence/native-check" "$RUNNER_TEMP/counter/native-gpmc"
           printf '%s\n' '${{ inputs.source_ref }}' > "$RUNNER_TEMP/site/source-sha.txt"
           python3 scripts/web/test-stage-pages.py
+          git clone --filter=blob:none --no-checkout --depth=1 --single-branch --branch gh-pages https://github.com/PhysicsQoo/QuPRS.git "$RUNNER_TEMP/pages-fixture"
+          git -C "$RUNNER_TEMP/pages-fixture" read-tree HEAD
+          python3 scripts/web/stage-pages.py "$RUNNER_TEMP/site" "$RUNNER_TEMP/pages-fixture"
+          git -C "$RUNNER_TEMP/pages-fixture" diff --cached --stat > "$RUNNER_TEMP/pages-staging.txt"
       - name: Native upstream unit suite in the default numerical profile
         env:
           QUPRS_GPMC_PATH: ${{ runner.temp }}/counter/native-gpmc
