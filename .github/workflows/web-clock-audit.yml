@@ -1,0 +1,62 @@
+name: Browser clock and timeout CPU audit
+on:
+  workflow_dispatch:
+    inputs:
+      core_run:
+        default: '43620797908'
+        required: true
+      counter_run:
+        default: '43620593266'
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BENCH_BASE: /tmp/quprs-clock-${{ github.run_id }}
+      BENCH_INPUT: /tmp/quprs-clock-${{ github.run_id }}/inputs
+      BENCH_OUT: /tmp/quprs-clock-${{ github.run_id }}/results
+      QUWEB_DIST: /tmp/quprs-clock-${{ github.run_id }}/site
+      QUWEB_NATIVE_CHECK: /tmp/quprs-clock-${{ github.run_id }}/core/build-evidence/native-check
+      QUWEB_NATIVE_GPMC: /tmp/quprs-clock-${{ github.run_id }}/counter/native-gpmc
+      QUWEB_PLAYWRIGHT: /tmp/quprs-clock-${{ github.run_id }}/qa/node_modules/playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Freeze inputs and binaries
+        run: |
+          set -euo pipefail
+          gh run view '${{ inputs.core_run }}' --json conclusion --jq .conclusion | grep -x success
+          gh run view '${{ inputs.counter_run }}' --json jobs --jq '.jobs[] | select(.name=="counter") | .conclusion' | grep -x success
+          revision=$(gh run view '${{ inputs.core_run }}' --json headSha --jq .headSha)
+          git fetch --no-tags --depth=1 origin "$revision"
+          git diff --exit-code "$revision" HEAD -- rust
+          counter_revision=$(gh run view '${{ inputs.counter_run }}' --json headSha --jq .headSha)
+          git fetch --no-tags --depth=1 origin "$counter_revision"
+          git diff --exit-code "$counter_revision" HEAD -- scripts/web/build-counter.sh scripts/web/BrowserTime.cc scripts/web/PhaseWeights.hpp rust/quprs/native/mpfr_weight_bridge.c
+          gh run download '${{ inputs.core_run }}' --name quprs-core --dir "$BENCH_BASE/core"
+          gh run download '${{ inputs.counter_run }}' --name quprs-gpmc --dir "$BENCH_BASE/counter"
+          python3 scripts/web/assemble.py "$BENCH_BASE/core" "$BENCH_BASE/counter" "$BENCH_BASE/site"
+          chmod +x "$QUWEB_NATIVE_CHECK" "$QUWEB_NATIVE_GPMC"
+          git clone --filter=blob:none --no-checkout https://github.com/PhysicsQoo/QuPRS.git "$BENCH_INPUT"
+          git -C "$BENCH_INPUT" checkout 60bcb250da4eb992f0b5f6727a5b6e57db8f0a84 -- benchmarks
+          sudo apt-get update -qq
+          sudo apt-get install -y libgmp-dev libmpfr-dev
+          npm install --prefix "$BENCH_BASE/qa" --no-save playwright@1.65.1
+          "$BENCH_BASE/qa/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Measure before, idle, active timeout, settled and closed browser
+        run: |
+          set -euo pipefail
+          core=$(python3 -c 'import os;print(min(os.sched_getaffinity(0)))')
+          taskset -c "$core" node benchmarks/browser/clock-audit.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clock-audit
+          path: /tmp/quprs-clock-${{ github.run_id }}/results
