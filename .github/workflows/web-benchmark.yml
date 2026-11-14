@@ -85,10 +85,10 @@ jobs:
           set -euo pipefail
           gh run download '${{ github.run_id }}' --pattern 'benchmark-*' --dir raw
           python3 benchmarks/browser/summarize.py raw results
-          cp benchmarks/browser/manifest.json results/
-          tar -czf quprs-browser-benchmark-raw.tar.gz raw results
-          sha256sum quprs-browser-benchmark-raw.tar.gz > SHA256SUMS
-          gh release create browser-benchmark-20261115 --target '${{ github.sha }}' --title 'QuPRS native/browser paper-corpus screen — 2026-11-15' --notes-file results/RESULTS.md quprs-browser-benchmark-raw.tar.gz SHA256SUMS results/*
+          cp benchmarks/browser/manifest.json benchmarks/browser/METHODS.md results/
+          tar -czf quprs-browser-benchmark-isolated-raw.tar.gz raw results
+          sha256sum quprs-browser-benchmark-isolated-raw.tar.gz > SHA256SUMS
+          gh release create browser-benchmark-isolated-20261115 --target '${{ github.sha }}' --title 'QuPRS isolated native/browser paper-corpus screen — 2026-11-15' --notes-file results/RESULTS.md quprs-browser-benchmark-isolated-raw.tar.gz SHA256SUMS results/*
       - uses: actions/upload-artifact@v4
         if: always()
         with:
