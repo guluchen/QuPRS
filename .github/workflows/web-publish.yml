@@ -106,3 +106,35 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+  archive:
+    if: inputs.deploy
+    needs: [validate, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preserve tested binaries, corresponding sources and checksums
+        run: |
+          set -euo pipefail
+          mkdir -p release/site release/qa
+          gh run download '${{ github.run_id }}' --name tested-browser-site --dir release/site
+          gh run download '${{ github.run_id }}' --name browser-validation --dir release/qa
+          tar -czf release/quprs-browser-mpfr-site.tar.gz -C release/site .
+          tar -czf release/quprs-browser-mpfr-qa.tar.gz -C release/qa .
+          git archive --format=tar HEAD | gzip > release/quprs-browser-complete-fork-source.tar.gz
+          cp release/site/engines/sources/gpmc-mpfr-browser-source.tar.gz release/
+          python3 - <<'PY'
+          import json,pathlib,hashlib
+          p=pathlib.Path('release')
+          record={'fork_revision':'${{ github.sha }}','validation_run':'${{ github.run_id }}','core_run':'${{ inputs.core_run }}','counter_run':'${{ inputs.counter_run }}','sha256':{f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.glob('*.tar.gz'))}}
+          (p/'RELEASE-PROVENANCE.json').write_text(json.dumps(record,indent=2)+'\n')
+          (p/'SHA256SUMS').write_text(''.join(h+'  '+name+'\n' for name,h in record['sha256'].items()))
+          PY
+          cat > release/notes.md <<'EOF'
+          QuPRS v0.16.0 browser fork, with the original MPFR source-phase bridge and original MPFR GPMC counter. Tested browser assets, complete fork sources, complete corresponding counter/GNU sources, QA evidence and checksums are included. See README, NOTICE and the bundled rebuild instructions for provenance and licenses. Distances are numerical estimates, not certified intervals. The separate paper-era Python comparison is not this release's native baseline.
+          EOF
+          gh release create web-mpfr-20261115 --target '${{ github.sha }}' --title 'QuPRS browser MPFR port — 2026-11-15' --notes-file release/notes.md release/*.tar.gz release/RELEASE-PROVENANCE.json release/SHA256SUMS
