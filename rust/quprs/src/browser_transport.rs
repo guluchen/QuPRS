@@ -39,7 +39,7 @@ pub fn capture_with_epsilon<T>(epsilon:f64,f:impl FnOnce()->Result<T>)->(Result<
 pub fn replay<T>(job:&Job,stdout:&str,f:impl FnOnce()->Result<T>)->Result<T> {
  let _restore=enter(State::Replay{job:job.clone(),stdout:stdout.into(),used:false},job.epsilon);let result=f();
  let used=STATE.with(|s|matches!(*s.borrow(),State::Replay{used:true,..}));
- if !used{return Err(anyhow!("Prepared browser counter result was not consumed"))}result
+ if !used{return match result{Err(error)=>Err(error),Ok(_)=>Err(anyhow!("Prepared browser counter result was not consumed"))}}result
 }
 #[cfg(test)]mod tests{
  use super::*;
@@ -48,6 +48,11 @@ pub fn replay<T>(job:&Job,stdout:&str,f:impl FnOnce()->Result<T>)->Result<T> {
   assert_eq!(replay(&job,"count",||exchange("gpmc","1 0\np cnf 1 1\n")).unwrap(),"count");assert!(!active());
   assert!(replay(&job,"count",||exchange("gpmc","p cnf 1 1\n-1 0\n")).is_err());assert!(!active());
   assert!(replay(&job,"count",||Ok(())).is_err());assert!(!active());
+ }
+ #[test]fn phase_acknowledgment_is_required(){
+  let cnf="c p quprs-phase 1 1 8 0 1 0 96\n";let (_,job)=capture(||exchange("gpmc",cnf));let job=job.unwrap();
+  let error=replay(&job,"count",||exchange("gpmc",cnf)).unwrap_err();assert!(error.to_string().contains("acknowledge"));
+  assert!(replay(&job,"c o quprs-phase-weights 1\ncount",||exchange("gpmc",cnf)).is_ok());
  }
  #[test]fn nested_sessions_restore_and_duplicate_result_rejected(){
   let (_,job)=capture(||{let (_,inner)=capture(||exchange("gpmc","inner"));assert!(inner.is_some());exchange("gpmc","outer")});let job=job.unwrap();assert_eq!(job.cnf,"outer");
