@@ -1,0 +1,50 @@
+name: Audit refreshed browser benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      base_run:
+        default: '43621384256'
+        required: true
+      retry_run:
+        default: '43623056435'
+        required: true
+      retry18_run:
+        default: '43623324975'
+        required: true
+permissions:
+  contents: write
+  actions: read
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require complete shards and reproduce quality audit
+        run: |
+          set -euo pipefail
+          gh run view '${{ inputs.base_run }}' --json conclusion --jq .conclusion | grep -x success
+          gh run view '${{ inputs.retry_run }}' --json jobs --jq '.jobs[]|select(.name=="screen (6)" or .name=="screen (8)")|.conclusion' > retry-status
+          test "$(grep -cx success retry-status)" = 2
+          gh run view '${{ inputs.retry18_run }}' --json jobs --jq '.jobs[]|select(.name=="screen (18)")|.conclusion' | grep -x success
+          gh run download '${{ inputs.base_run }}' --pattern 'benchmark-[0-9]*' --dir original
+          gh run download '${{ inputs.retry_run }}' --pattern 'benchmark-[0-9]*' --dir retry
+          gh run download '${{ inputs.retry18_run }}' --pattern 'benchmark-[0-9]*' --dir retry18
+          python3 benchmarks/browser/combine.py original retry retry18 combined
+          python3 benchmarks/browser/summarize.py combined results
+          cp combined/RERUN-AUDIT.json benchmarks/browser/METHODS.md benchmarks/browser/manifest.json results/
+          python3 - <<'PY'
+          import pathlib,json
+          p=pathlib.Path('results');record={'base_run':'${{ inputs.base_run }}','retry_run':'${{ inputs.retry_run }}','retry18_run':'${{ inputs.retry18_run }}','summary_source':'${{ github.sha }}','replaced_shards':[6,8,18],'setup_failure':'Retry run shard18 hit a GitHub API502 before timing; no measurements from that failed job were used.'}
+          (p/'PROVENANCE.json').write_text(json.dumps(record,indent=2)+'\n')
+          with (p/'RESULTS.md').open('a') as f:f.write('\n## Drift rerun audit\n\nExactly the predeclared original noisy shards 6,8,18 were rerun once; complete native/WASM cells are replaced together, without selecting the fastest run. Both original and replacement evidence is preserved. See RERUN-AUDIT.json for anchor quality and every outcome change. A separate retry18 job replaces an API502 setup failure that produced no timing cells.\n')
+          PY
+          tar -czf quprs-browser-benchmark-refreshed-raw.tar.gz original retry retry18 combined results
+          sha256sum quprs-browser-benchmark-refreshed-raw.tar.gz > SHA256SUMS
+          gh release create browser-benchmark-refreshed-20261115 --target '${{ github.sha }}' --title 'QuPRS native/browser screen with predefined drift reruns — 2026-11-15' --notes-file results/RESULTS.md quprs-browser-benchmark-refreshed-raw.tar.gz SHA256SUMS results/*
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: refreshed-benchmark-summary
+          path: results
