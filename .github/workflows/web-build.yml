@@ -1,6 +1,11 @@
 name: Browser port build
 on:
   workflow_dispatch:
+    inputs:
+      core_only:
+        description: Rebuild only the Rust core when counter source is unchanged
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -16,16 +21,17 @@ jobs:
           targets: wasm32-unknown-unknown
       - name: Native adapter and transport tests
         run: |
+          set -euo pipefail
           mkdir -p build-evidence
-          cargo test --manifest-path rust/Cargo.toml -p quprs --no-default-features --features browser-transport --lib browser_transport 2>&1 | tee build-evidence/transport-tests.log
-          cargo test --manifest-path rust/Cargo.toml -p quprs-web 2>&1 | tee build-evidence/adapter-tests.log
-          cargo build --manifest-path rust/Cargo.toml -p quprs-web --release --example native_check
+          cargo test --locked --manifest-path rust/Cargo.toml -p quprs --no-default-features --features browser-transport --lib browser_transport 2>&1 | tee build-evidence/transport-tests.log
+          cargo test --locked --manifest-path rust/Cargo.toml -p quprs-web 2>&1 | tee build-evidence/adapter-tests.log
+          cargo build --locked --manifest-path rust/Cargo.toml -p quprs-web --release --example native_check
           cp rust/target/release/examples/native_check build-evidence/native-check
           cp rust/Cargo.lock build-evidence/Cargo.lock
       - name: Build actual QuPRS core as WebAssembly
         run: |
           cargo install wasm-bindgen-cli --locked --version 0.2.100
-          RUSTFLAGS='-C link-arg=--max-memory=536870912' cargo build --manifest-path rust/Cargo.toml --release --target wasm32-unknown-unknown -p quprs-web
+          RUSTFLAGS='-C link-arg=--max-memory=536870912' cargo build --locked --manifest-path rust/Cargo.toml --release --target wasm32-unknown-unknown -p quprs-web
           wasm-bindgen rust/target/wasm32-unknown-unknown/release/quprs_web.wasm --target web --out-dir web/pkg
           cp rust/Cargo.lock build-evidence/Cargo.lock
       - uses: actions/upload-artifact@v4
@@ -36,6 +42,7 @@ jobs:
             web/pkg
             build-evidence
   counter:
+    if: ${{ !inputs.core_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:

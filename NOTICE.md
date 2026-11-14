@@ -1002,3 +1002,12 @@ DEALINGS IN THE SOFTWARE.
    See the License for the specific language governing permissions and
    limitations under the License.
 </details>
+## Browser fork — 2026-11-15
+
+This guluchen/QuPRS fork adds a browser UI and WASM transport around the original QuPRS v0.16.0 core (upstream 0b28736651b3740ed3b201edd2efdef3da541e0d). Upstream verification/reduction/classification remains in use. A portable clock alias and opt-in capture/replay transport adapt the subprocess boundary. The browser build omits the native MPFR input-weight bridge and uses binary64 input weights; the separate GPMC counter retains its original MPFR arithmetic. Reported distances are numerical estimates, not end-to-end certified intervals.
+
+Worker ownership, bounded output collection and the WASM resource-clock shim are adapted from guluchen/PathsumWMC (MIT), copyright 2026 guluchen and contributors. The shim reports elapsed worker wall time and allocated linear memory rather than OS CPU time/RSS. Browser integration was prepared with Codex; it is not a new independent reimplementation of QuPRS.
+
+GPMC v1.0.2 is pinned at PhysicsQoo/GPMC 93cae8dbf2da967e34fea8b7f40bc8f98362e2e0. The browser counter changes portability/build integration only. Its corresponding source bundle retains original MIT/MPFR-C++ notices and the original GMP 6.3.0 and MPFR 4.2.1 GNU source tarballs and licenses. The frontend MIT license does not replace these dependencies' licenses.
+
+Upstream workflow files are retained unchanged under .github/upstream-workflows so this fork does not run upstream package-publishing or large benchmark automation. Browser-specific workflows are separate.

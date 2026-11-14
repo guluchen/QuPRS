@@ -85,7 +85,7 @@ impl BrowserJob {
 #[wasm_bindgen(start)]pub fn start(){console_error_panic_hook::set_once();}
 #[cfg(test)]mod tests{
  use super::*;
- fn req(gates:&str,mode:&str)->String{json!({"circuit1":format!("OPENQASM 2.0; include \"qelib1.inc\"; qreg q[1]; {gates}"),"circuit2":"OPENQASM 2.0; include \"qelib1.inc\"; qreg q[1];","mode":mode}).to_string()}
+ fn req(gates:&str,mode:&str)->String{json!({"circuit1":format!("OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[1];\n{}",gates.replace(';',";\n")),"circuit2":"OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[1];\n","mode":mode}).to_string()}
  #[test]fn symbolic_identity_is_not_labelled_general_certificate(){let j=BrowserJob::new(&req("h q[0]; h q[0];","hybrid")).unwrap();let v:Value=serde_json::from_str(&j.job()).unwrap();assert_eq!(v["report"]["distance_estimate"].as_f64(),Some(0.0));assert_eq!(v["report"]["certified_distance_interval"],false);}
  #[test]fn prepare_count_finish_and_reject_missing_count(){let j=BrowserJob::new(&req("h q[0]; h q[0];","wmc")).unwrap();let v:Value=serde_json::from_str(&j.job()).unwrap();assert!(v["cnf"].is_string());assert!(j.finish("").contains("error"));}
  #[test]fn validation_and_transport_restore_on_error(){assert!(BrowserJob::new(&req("measure q[0];","wmc")).is_err());assert!(!browser_transport::active());assert!(BrowserJob::new(&req("","invalid")).is_err());assert!(!browser_transport::active());}
