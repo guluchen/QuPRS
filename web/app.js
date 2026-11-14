@@ -8,17 +8,18 @@ $('cz').onclick=()=>setPair('cz q[0],q[1];','h q[1];\ncx q[0],q[1];\nh q[1];',2)
 for(const side of ['left','right'])$(side+'File').onchange=async e=>{const file=e.target.files[0];if(!file)return;pendingUploads++;$('run').disabled=true;try{$(side).value=await file.text()}finally{pendingUploads--;$('run').disabled=Boolean(host)||pendingUploads>0}};
 $('stop').onclick=()=>host?.cancel();
 $('form').onsubmit=async e=>{
- e.preventDefault();last=null;$('download').disabled=true;$('distance').textContent='—';$('verdict').textContent='';$('warning').textContent='';$('timing').textContent='';$('report').textContent='';
+ e.preventDefault();last=null;$('download').disabled=true;$('distance').textContent='—';$('verdict').textContent='';$('warning').textContent='';$('timing').textContent='';
  const request={circuit1:$('left').value,circuit2:$('right').value,mode:$('mode').value,strategy:$('strategy').value,distance_tolerance:Number($('epsilon').value),rr_tolerance:Number($('rr').value)};
  busy(true);$('state').textContent='Computing locally…';const start=performance.now();
  try{
   const root=new Worker(new URL('worker.js?v=20261115-quprs-source-mpfr-v2',import.meta.url),{type:'module'});host=createWorkerHost(root,new URL('engines/',import.meta.url).href,200000);root.postMessage({request});
   const {report}=await host.result;last={...report,wall_ms:performance.now()-start};$('state').textContent='Completed.';
   const d=report.distance_estimate;$('distance').textContent=typeof d==='number'?`≈ ${d===0?'0':d.toExponential(5)}`:'Not computed';
-  $('verdict').textContent=`QuPRS result: ${report.rr_approximate?'accepted under RR tolerance':report.status}`;
-  $('warning').textContent=report.warning||'Numerical result; not a certified distance interval.';
+  const labels={equivalent:'Equivalent',"equivalent*":'Equivalent up to global phase',not_equivalent:'Different beyond tolerance',unknown:'Inconclusive'};
+  $('verdict').textContent=report.rr_approximate?'Within reduction tolerance':(labels[report.status]||report.status);
+  $('warning').textContent=report.warning||'Numerical estimate.';
   $('timing').textContent=`Wall time: ${(last.wall_ms/1000).toFixed(3)} s${report.solver_invoked?' · GPMC invoked':' · completed by reduction/analytic check'}`;
-  $('report').textContent=JSON.stringify(last,null,2);$('download').disabled=false;
+  $('download').disabled=false;
  }catch(error){$('state').textContent=error.code==='STOPPED'?'Stopped. No result assigned.':`Error: ${error.message}`}
  finally{host=null;busy(false)}
 };

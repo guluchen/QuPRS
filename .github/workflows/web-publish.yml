@@ -5,11 +5,11 @@ on:
       core_run:
         description: Successful blocking-tested Rust core build
         required: true
-        default: '43617230089'
+        default: '43620797908'
       counter_run:
         description: Successful original MPFR counter build
         required: true
-        default: '43616287735'
+        default: '43620593266'
       deploy:
         description: Publish only after all checks pass
         type: boolean
@@ -137,4 +137,4 @@ jobs:
           cat > release/notes.md <<'EOF'
           QuPRS v0.16.0 browser fork, with the original MPFR source-phase bridge and original MPFR GPMC counter. Tested browser assets, complete fork sources, complete corresponding counter/GNU sources, QA evidence and checksums are included. See README, NOTICE and the bundled rebuild instructions for provenance and licenses. Distances are numerical estimates, not certified intervals. The separate paper-era Python comparison is not this release's native baseline.
           EOF
-          gh release create web-mpfr-20261115 --target '${{ github.sha }}' --title 'QuPRS browser MPFR port — 2026-11-15' --notes-file release/notes.md release/*.tar.gz release/RELEASE-PROVENANCE.json release/SHA256SUMS
+          gh release create web-${{ github.run_id }} --target '${{ github.sha }}' --title 'QuPRS browser MPFR port — 2026-11-15' --notes-file release/notes.md release/*.tar.gz release/RELEASE-PROVENANCE.json release/SHA256SUMS
