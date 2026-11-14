@@ -4,7 +4,7 @@ This fork adds a local WebAssembly workbench to the original [QuPRS](https://git
 
 Browser numerical results are **not certified distance intervals**. The browser sends original rational phase descriptors to the actual MPFR GPMC worker, which runs the upstream MPFR source-weight bridge at its tolerance-selected 96–1024-bit precision. RR can accept under its configured tolerance without computing a distance. The separate [PathsumWMC workbench](https://guluchen.github.io/PathsumWMC/) provides rigorously enclosed distance intervals.
 
-[**Open the browser workbench**](https://guluchen.github.io/QuPRS/) · [Tested assets and complete sources](https://github.com/guluchen/QuPRS/releases/tag/web-mpfr-20261115) · [Port architecture](docs/BROWSER_PORT.md) · [Benchmark methods](benchmarks/browser/METHODS.md)
+[**Open the browser workbench**](https://guluchen.github.io/QuPRS/) · [Tested assets and complete sources](https://github.com/guluchen/QuPRS/releases/tag/web-mpfr-20261115) · [Port architecture](docs/BROWSER_PORT.md) · [Benchmark results](benchmarks/browser/results/ASSESSMENT.md) · [Benchmark methods](benchmarks/browser/METHODS.md)
 
 See [browser source](web/), [port/rebuild scripts](scripts/web/) and [notices](NOTICE.md). Upstream automation is preserved under `.github/upstream-workflows/`; this fork runs only its browser workflows.
 

@@ -1,0 +1,146 @@
+{
+  "isolation": "Each WASM trial uses a fresh browser; browser and HTTP server are closed before any subsequent sample. Browser launch/close are excluded from request timing and recorded separately.",
+  "cells": 220,
+  "trials": 892,
+  "pairs": 73,
+  "mode_pairs": 110,
+  "conflicts": [],
+  "timing_drift_pass": true,
+  "binaries": {
+    "native": "439efa047d9b79bf4c9aa0a7b4d28d98fae0da98399e0de42c428a43c2026ef4",
+    "counter": "258998968ddd745ec00fc9c2c3796233762f44c47fdcf78b52dabc581262b931",
+    "core": "2cf3517b34ea8be02ef54463a9c58b78d7af4ec1e072617013a4cb947f343481"
+  },
+  "anchor_ratios": {
+    "0": 0.9947536757220136,
+    "1": 0.9951676065427016,
+    "10": 0.9948746863173215,
+    "11": 1.0015244092447018,
+    "12": 1.007198823337327,
+    "13": 0.9394429202106613,
+    "14": 0.9980672159652867,
+    "15": 0.9655434869069077,
+    "16": 0.9849270719778975,
+    "17": 0.995492059105966,
+    "18": 0.9894142114981594,
+    "19": 0.9979670139757054,
+    "2": 0.983082810795904,
+    "20": 1.0270415756368596,
+    "21": 0.9933907480283406,
+    "22": 0.9956882776608373,
+    "23": 0.9896345819359257,
+    "3": 1.0019990042962703,
+    "4": 0.997102169118064,
+    "5": 0.9998768829381292,
+    "6": 0.9976988142364843,
+    "7": 0.9838904106354219,
+    "8": 0.9947481856295325,
+    "9": 0.9989715137213248
+  },
+  "groups": [
+    {
+      "mode": "hybrid",
+      "engine": "native",
+      "cells": 37,
+      "completed": 30,
+      "distance_available": 13,
+      "statuses": {
+        "equivalent*": 19,
+        "not_equivalent": 5,
+        "": 7,
+        "equivalent": 6
+      }
+    },
+    {
+      "mode": "hybrid",
+      "engine": "wasm",
+      "cells": 37,
+      "completed": 30,
+      "distance_available": 13,
+      "statuses": {
+        "equivalent*": 19,
+        "not_equivalent": 5,
+        "": 7,
+        "equivalent": 6
+      }
+    },
+    {
+      "mode": "wmc",
+      "engine": "native",
+      "cells": 37,
+      "completed": 26,
+      "distance_available": 10,
+      "statuses": {
+        "equivalent*": 18,
+        "": 11,
+        "equivalent": 6,
+        "not_equivalent": 2
+      }
+    },
+    {
+      "mode": "wmc",
+      "engine": "wasm",
+      "cells": 37,
+      "completed": 28,
+      "distance_available": 11,
+      "statuses": {
+        "equivalent*": 20,
+        "": 9,
+        "equivalent": 6,
+        "not_equivalent": 2
+      }
+    },
+    {
+      "mode": "reduction",
+      "engine": "native",
+      "cells": 36,
+      "completed": 36,
+      "distance_available": 35,
+      "statuses": {
+        "equivalent*": 5,
+        "equivalent": 30,
+        "unknown": 1
+      }
+    },
+    {
+      "mode": "reduction",
+      "engine": "wasm",
+      "cells": 36,
+      "completed": 36,
+      "distance_available": 35,
+      "statuses": {
+        "equivalent*": 5,
+        "equivalent": 30,
+        "unknown": 1
+      }
+    }
+  ],
+  "geomean_wasm_native_whole_request_native_at_least_100ms": {
+    "hybrid": {
+      "pairs": 6,
+      "ratio": 2.1591210546924553
+    },
+    "wmc": {
+      "pairs": 10,
+      "ratio": 2.4366359560793813
+    },
+    "reduction": {
+      "pairs": 3,
+      "ratio": 1.9799971477909142
+    }
+  },
+  "anchor_qualified_paired_ratios": {
+    "hybrid": {
+      "pairs": 6,
+      "ratio": 2.1591210546924553
+    },
+    "wmc": {
+      "pairs": 10,
+      "ratio": 2.4366359560793813
+    },
+    "reduction": {
+      "pairs": 3,
+      "ratio": 1.9799971477909142
+    }
+  }
+}

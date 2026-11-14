@@ -1,0 +1,13 @@
+{
+  "status": "Canonical isolated screen; all reused-browser timings excluded",
+  "run": 43624612362,
+  "source": "8c5ab7a",
+  "frozen_core_run": 43620797908,
+  "frozen_counter_run": 43620593266,
+  "release": "https://github.com/guluchen/QuPRS/releases/tag/browser-benchmark-isolated-20261115",
+  "whole_raw_results": "results.json release asset",
+  "core_binaries": "web-mpfr-20261115 release; hashes in summary.json",
+  "clock_mutant_audit": 43624731517,
+  "online_verified_assets": 15,
+  "native_baseline": "Same browser adapter compiled natively, not stock upstream single-pass CLI"
+}
