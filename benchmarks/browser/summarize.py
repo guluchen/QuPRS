@@ -7,6 +7,7 @@ assert all(s['complete'] for s in shards)
 cells=[c for s in shards for c in s['cells']];keys=[(c['id'],c['mode'],c['engine']) for c in cells]
 assert len(keys)==len(set(keys))==220,len(keys)
 assert len({json.dumps(s['binary_sha256'],sort_keys=True) for s in shards})==1
+quality_by_cell={(c['id'],c['mode'],c['engine']):(.9<=s['anchor_ratio']<=1.1) for s in shards for c in s['cells']}
 rows=[];conflicts=[]
 for c in cells:
  reports=[t['report'] for t in c['trials'] if 'report' in t and not t.get('error')]
@@ -15,15 +16,18 @@ for c in cells:
  ds=[r['distance_estimate'] for r in reports if r.get('distance_estimate') is not None]
  row={k:c[k] for k in ['id','family','mode','engine','successes']};row.update(trials=len(c['trials']),complete=c['successes']==len(c['trials']),status='|'.join(statuses),median_request_ms=c.get('median_request_ms'),median_whole_ms=c.get('median_whole_ms'),distance_available=len(ds)==len(c['trials']),distance_median=statistics.median(ds) if ds else None,rr_approximate=any(r.get('rr_approximate') for r in reports),errors=' | '.join(sorted({t.get('error','') for t in c['trials'] if t.get('error')})))
  rows.append(row)
-by={(r['id'],r['mode'],r['engine']):r for r in rows};ratios=collections.defaultdict(list)
+by={(r['id'],r['mode'],r['engine']):r for r in rows};ratios=collections.defaultdict(list);qualified=collections.defaultdict(list)
 for r in rows:
  if r['engine']!='native':continue
  w=by[(r['id'],r['mode'],'wasm')]
  if r['complete'] and w['complete']:
   if r['status']!=w['status']:conflicts.append({'kind':'native-wasm-status','id':r['id'],'mode':r['mode'],'native':r['status'],'wasm':w['status']})
   if r['distance_median'] is not None and w['distance_median'] is not None and abs(r['distance_median']-w['distance_median'])>1e-8:conflicts.append({'kind':'native-wasm-distance','id':r['id'],'mode':r['mode'],'native':r['distance_median'],'wasm':w['distance_median']})
-  if r['median_whole_ms']>=100:ratios[r['mode']].append(w['median_whole_ms']/r['median_whole_ms'])
+  if r['median_whole_ms']>=100:
+   ratio=w['median_whole_ms']/r['median_whole_ms'];ratios[r['mode']].append(ratio)
+   if quality_by_cell[(r['id'],r['mode'],'native')]:qualified[r['mode']].append(ratio)
 summary={'cells':len(cells),'trials':sum(len(c['trials']) for c in cells),'pairs':73,'mode_pairs':110,'conflicts':conflicts,'timing_drift_pass':all(.9<=s['anchor_ratio']<=1.1 for s in shards),'binaries':shards[0]['binary_sha256'],'anchor_ratios':{s['shard']:s['anchor_ratio'] for s in shards},'groups':[],'geomean_wasm_native_whole_request_native_at_least_100ms':{mode:{'pairs':len(rs),'ratio':math.exp(statistics.mean(map(math.log,rs)))} for mode,rs in ratios.items()}}
+summary['anchor_qualified_paired_ratios']={mode:{'pairs':len(rs),'ratio':math.exp(statistics.mean(map(math.log,rs)))} for mode,rs in qualified.items()}
 for mode in ['hybrid','wmc','reduction']:
  for engine in ['native','wasm']:
   rs=[r for r in rows if r['mode']==mode and r['engine']==engine]
@@ -36,6 +40,8 @@ text=['# QuPRS v0.16.0 native / browser screen','', 'The native comparator is th
 for g in summary['groups']:text.append(f'| {g["mode"]} | {g["engine"]} | {g["completed"]} / {g["cells"]} | {g["distance_available"]} |')
 text+=['','A completed report can be indeterminate or a tolerance-based reduction acceptance without a computed distance. Status counts and all errors are retained in JSON/CSV. Small circuit/GPMC enumeration tests provide separate correctness evidence; repeated benchmark timings alone do not establish ground truth.','',f'Native/WASM or repeat discrepancies: **{len(conflicts)}**. See summary.json for every discrepancy.','', 'Native processes use a 4 GiB address-space cap and 16 MiB stack. Each WASM module has a 512 MiB linear-memory maximum, with browser overhead outside that limit. Same-host native/WASM requests run serially on one pinned core; order is rotated. Page/server startup and browser launch are excluded; worker startup, core loading/instantiation and local-HTTP fetches remain inside browser requests. Native whole times include process startup. These timings are not public-network page-load measurements.','', '## Browser/native timing ratio','', 'Only paired successful cells with native whole-request time >=100 ms enter these geometric means. A ratio above one means browser slower. Exact zero/near-zero native startup cases are omitted from this ratio only, never from coverage.']
 for mode,r in summary['geomean_wasm_native_whole_request_native_at_least_100ms'].items():text.append(f'- {mode}: {r["ratio"]:.3f}x ({r["pairs"]} pairs).')
+text+=['','Pairs from shards whose anchors exceed 10% are excluded from this additional quality-qualified timing subset only; all coverage cells and all raw diagnostic ratios above remain available. This is a subset screen, not a full-suite gate.']
+for mode,r in summary['anchor_qualified_paired_ratios'].items():text.append(f'- Anchor-qualified {mode}: {r["ratio"]:.3f}x ({r["pairs"]} pairs).')
 rat=list(summary['anchor_ratios'].values());text+=['',f'Timing quality: {"PASS (all anchors within 10%)" if summary["timing_drift_pass"] else "NOISY: at least one anchor exceeds 10%; ratios are diagnostic, not stable performance claims"}.',f'Within-shard SHA256 drift-anchor range: {min(rat):.3f}–{max(rat):.3f}. Anchors are diagnostic and no time has been drift-corrected. Shards on different CI hosts are not a common CPU for cross-input ranking; each reported native/browser ratio is paired within its own host.','', 'Input sources/hashes: manifest.json, PhysicsQoo/QuPRS paper-era 60bcb250; original MQTBench and Feynman pairs without regeneration or angle normalization. Engine: upstream QuPRS 0b287366; original GPMC 93cae8db; source-phase weights via the upstream C MPFR bridge, tolerance-selected 96–1024 bits, original counter at 30 decimal digits. Raw binary hashes, CPU/browser metadata and individual results are preserved.']
 (out/'RESULTS.md').write_text('\n'.join(text)+'\n')
 print(json.dumps(summary,indent=2))
