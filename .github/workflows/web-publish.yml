@@ -34,10 +34,13 @@ jobs:
         run: |
           set -euo pipefail
           gh run view '${{ inputs.core_run }}' --json conclusion --jq .conclusion | grep -x success
-          gh run view '${{ inputs.counter_run }}' --json conclusion --jq .conclusion | grep -x success
+          gh run view '${{ inputs.counter_run }}' --json jobs --jq '.jobs[] | select(.name=="counter") | .conclusion' | grep -x success
           revision=$(gh run view '${{ inputs.core_run }}' --json headSha --jq .headSha)
           git fetch --no-tags --depth=1 origin "$revision"
           git diff --exit-code "$revision" HEAD -- rust
+          counter_revision=$(gh run view '${{ inputs.counter_run }}' --json headSha --jq .headSha)
+          git fetch --no-tags --depth=1 origin "$counter_revision"
+          git diff --exit-code "$counter_revision" HEAD -- scripts/web/build-counter.sh scripts/web/BrowserTime.cc scripts/web/PhaseWeights.hpp rust/quprs/native/mpfr_weight_bridge.c
           gh run download '${{ inputs.core_run }}' --name quprs-core --dir "$RUNNER_TEMP/core"
           gh run download '${{ inputs.counter_run }}' --name quprs-gpmc --dir "$RUNNER_TEMP/counter"
           python3 scripts/web/assemble.py "$RUNNER_TEMP/core" "$RUNNER_TEMP/counter" "$RUNNER_TEMP/site"
