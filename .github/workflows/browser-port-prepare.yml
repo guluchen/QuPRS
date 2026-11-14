@@ -1,0 +1,49 @@
+name: Prepare upstream browser contribution
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        required: true
+        default: feat/browser-workbench-20261115
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    env:
+      QUPRS_SOLVER_PROVISION: external
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Resolve existing lockfiles and format the new Rust modules
+        run: |
+          set -euo pipefail
+          cargo metadata --manifest-path rust/Cargo.toml --format-version=1 > "$RUNNER_TEMP/workspace-metadata.json"
+          cargo metadata --manifest-path benchmarks/rust_core/Cargo.toml --format-version=1 > "$RUNNER_TEMP/benchmark-metadata.json"
+          python3 - <<'PY'
+          import os,pathlib,shutil,re,tomllib,json
+          dst=pathlib.Path(os.environ['RUNNER_TEMP'])/'standalone-library'
+          shutil.copytree('rust/quprs',dst)
+          p=dst/'Cargo.toml';s=p.read_text();values=tomllib.loads(pathlib.Path('rust/Cargo.toml').read_text())['workspace']['package']
+          for name in ['version','edition','publish']:
+            s=re.sub(r'^'+name+r'\.workspace\s*=\s*true$',name+' = '+json.dumps(values[name]),s,flags=re.M)
+          p.write_text(s)
+          PY
+          cargo metadata --manifest-path "$RUNNER_TEMP/standalone-library/Cargo.toml" --format-version=1 > "$RUNNER_TEMP/library-metadata.json"
+          cp "$RUNNER_TEMP/standalone-library/Cargo.lock" rust/quprs/Cargo.lock
+          rustfmt --edition 2021 rust/quprs/src/browser_transport.rs rust/web/src/lib.rs rust/web/examples/native_check.rs
+          mkdir -p port-preparation/rust/quprs/src port-preparation/rust/web/src port-preparation/rust/web/examples port-preparation/benchmarks/rust_core
+          cp rust/Cargo.lock port-preparation/rust/
+          cp rust/quprs/Cargo.lock port-preparation/rust/quprs/
+          cp benchmarks/rust_core/Cargo.lock port-preparation/benchmarks/rust_core/
+          cp rust/quprs/src/browser_transport.rs port-preparation/rust/quprs/src/
+          cp rust/web/src/lib.rs port-preparation/rust/web/src/
+          cp rust/web/examples/native_check.rs port-preparation/rust/web/examples/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: port-preparation
+          path: port-preparation
