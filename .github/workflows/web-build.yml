@@ -1,0 +1,60 @@
+name: Browser port build
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      QUPRS_SOLVER_PROVISION: external
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Native adapter and transport tests
+        run: |
+          mkdir -p build-evidence
+          cargo test --manifest-path rust/Cargo.toml -p quprs --no-default-features --features browser-transport --lib browser_transport 2>&1 | tee build-evidence/transport-tests.log
+          cargo test --manifest-path rust/Cargo.toml -p quprs-web 2>&1 | tee build-evidence/adapter-tests.log
+          cargo build --manifest-path rust/Cargo.toml -p quprs-web --release --example native_check
+          cp rust/target/release/examples/native_check build-evidence/native-check
+          cp rust/Cargo.lock build-evidence/Cargo.lock
+      - name: Build actual QuPRS core as WebAssembly
+        run: |
+          cargo install wasm-bindgen-cli --locked --version 0.2.100
+          RUSTFLAGS='-C link-arg=--max-memory=536870912' cargo build --manifest-path rust/Cargo.toml --release --target wasm32-unknown-unknown -p quprs-web
+          wasm-bindgen rust/target/wasm32-unknown-unknown/release/quprs_web.wasm --target web --out-dir web/pkg
+          cp rust/Cargo.lock build-evidence/Cargo.lock
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quprs-core
+          path: |
+            web/pkg
+            build-evidence
+  counter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: '4.0.23'
+      - uses: actions/cache@v4
+        with:
+          path: .browser-prefix
+          key: quprs-gmp630-mpfr421-emsdk4023-v1
+      - name: Build pinned original MPFR GPMC
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libgmp-dev libmpfr-dev zlib1g-dev
+          bash scripts/web/build-counter.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quprs-gpmc
+          path: web/engines
